@@ -31,6 +31,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && npm install mongoose \
     && npm install -g typescript \
+    && npm install -g router \
+    && npm install -g vuex \
+    && npm install -g lint-formatter \
     && npm install express-generator -g 
 
 RUN groupadd --force www-data
