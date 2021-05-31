@@ -15,7 +15,7 @@ startd:
 stop:
 	docker stop $(APP_NAME)
 
-restart: stop start
+restart: stop startd
 
 shell:
 	docker exec -it $(APP_NAME) bash
