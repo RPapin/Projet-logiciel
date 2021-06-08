@@ -23,6 +23,7 @@ RUN apt-get update \
     && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list \
     && apt-get update \
     && apt-get install -y mongodb-org \
+    && rm -rf /var/lib/apt/lists/* \
     && systemctl enable mongod \
     && apt-get update \
     && apt-get install -y yarn \
@@ -34,16 +35,23 @@ RUN apt-get update \
     && npm install -g router \
     && npm install -g vuex \
     && npm install -g lint-formatter \
+    && npm install -g dotenv \
     && npm install express-generator -g 
 
 RUN groupadd --force www-data
 RUN groupadd --force elective
 RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 elective
 
+WORKDIR /home/elective/work
+
 COPY start-container /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container
 
-EXPOSE 8000
+# Expose ports.
+#   - 8080 : nodejs
+#   - 27017: process
+#   - 28017: http
+EXPOSE 8080 27017 28017
 
 ENTRYPOINT ["start-container"]
 
