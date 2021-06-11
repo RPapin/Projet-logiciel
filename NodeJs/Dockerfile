@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 
 LABEL maintainer="g4"
 
-WORKDIR /var/www/html
+WORKDIR /home/elective/work
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
@@ -35,7 +35,6 @@ RUN groupadd --force www-data
 RUN groupadd --force elective
 RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 elective
 
-WORKDIR /home/elective/work
 
 COPY start-container /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container

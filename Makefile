@@ -1,21 +1,22 @@
 # variables
-IMAGE_NAME = g4/elective:v2
-APP_NAME = elective
-PORT = 8080
+SUBDIRS = MongoDb NodeJs
 
 #commands
 build:
-	docker build -t $(IMAGE_NAME) . -f ${PWD}/Dockerfile
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir build; \
+	done
 
 start:
-	docker run -i -t --rm -p=$(PORT):$(PORT) -v ${PWD}/work:/home/elective/work --name="$(APP_NAME)" $(IMAGE_NAME)
-startd:
-	docker run -i -t --rm -d -p=$(PORT):$(PORT) -v ${PWD}/work:/home/elective/work --name="$(APP_NAME)" $(IMAGE_NAME)
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir startd; \
+	done
+
+startd: start
 
 stop:
-	docker stop $(APP_NAME)
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir stop; \
+	done
 
 restart: stop startd
-
-shell:
-	docker exec -it $(APP_NAME) bash
