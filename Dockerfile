@@ -19,13 +19,6 @@ RUN apt-get update \
     && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
     && apt-get update \
     && apt-get install -y nodejs npm \
-    && wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - \
-    && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list \
-    && apt-get update \
-    && apt-get install -y mongodb-org \
-    && rm -rf /var/lib/apt/lists/* \
-    && systemctl enable mongod \
-    && apt-get update \
     && apt-get install -y yarn \
     && apt-get -y autoremove \
     && apt-get clean \
@@ -49,9 +42,7 @@ RUN chmod +x /usr/local/bin/start-container
 
 # Expose ports.
 #   - 8080 : nodejs
-#   - 27017: process
-#   - 28017: http
-EXPOSE 8080 27017 28017
+EXPOSE 8080
 
 ENTRYPOINT ["start-container"]
 
