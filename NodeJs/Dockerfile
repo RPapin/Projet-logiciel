@@ -27,6 +27,7 @@ RUN apt-get update \
     && npm install -g typescript \
     && npm install -g router \
     && npm install -g vuex \
+    && npm install -g @vue/cli \
     && npm install -g lint-formatter \
     && npm install -g dotenv \
     && npm install express-generator -g 
