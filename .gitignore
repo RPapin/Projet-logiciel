@@ -1,3 +1,10 @@
+
+
+#Mongo useless files
+MongoDb/data/diagnostic.data
+MongoDb/data/journal
+
+
 # Logs
 logs
 *.log
@@ -105,3 +112,4 @@ dist
 
 # TernJS port file
 .tern-port
+
