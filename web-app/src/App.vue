@@ -6,10 +6,10 @@
         <a class="navbar-brand float-left">MEVN Stack Example</a>
         <ul class="nav navbar-nav flex-row float-right">
           <li class="nav-item">
-            <router-link class="nav-link pr-3" to="/">Create Student</router-link>
+            <router-link class="nav-link pr-3" to="/">Create Order</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/view">View Students</router-link>
+            <router-link class="nav-link" to="/view">View Orders</router-link>
           </li>
         </ul>
       </div>
