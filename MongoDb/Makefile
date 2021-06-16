@@ -13,9 +13,9 @@ build:
 	docker build -t $(IMAGE_NAME) . -f "$(SCRIPTPATH)/Dockerfile"
 
 start:
-	docker run -i -t --rm -p=$(PORT):$(PORT) -v $(SCRIPTPATH)/work:/home/elective/work --name="$(APP_NAME)" $(IMAGE_NAME)
+	docker run -i -t --rm -p=$(PORT):$(PORT) -v $(SCRIPTPATH)/data:/data/db --name="$(APP_NAME)" $(IMAGE_NAME)
 startd:
-	docker run -i -t --rm -d -p=$(PORT):$(PORT) -v $(SCRIPTPATH)/work:/home/elective/work --name="$(APP_NAME)" $(IMAGE_NAME)
+	docker run -i -t --rm -d -p=$(PORT):$(PORT) -v $(SCRIPTPATH)/data:/data/db --name="$(APP_NAME)" $(IMAGE_NAME)
 
 stop:
 	docker stop $(APP_NAME)
