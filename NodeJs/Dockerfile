@@ -28,4 +28,4 @@ RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 ele
 #   - 8080 : nodejs
 EXPOSE 8080
 
-CMD ["node"]
+CMD [ "npm", "run", "start.dev" ]

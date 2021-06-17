@@ -27,4 +27,4 @@ RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 ele
 #   - 4001 : Express
 EXPOSE 4001
 
-CMD ["node"]
+CMD [ "npm", "run", "start.dev" ]
