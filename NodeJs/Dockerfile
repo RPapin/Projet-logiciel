@@ -44,6 +44,4 @@ RUN chmod +x /usr/local/bin/start-container
 #   - 8080 : nodejs
 EXPOSE 8080
 
-ENTRYPOINT ["start-container"]
-
 CMD ["node"]
