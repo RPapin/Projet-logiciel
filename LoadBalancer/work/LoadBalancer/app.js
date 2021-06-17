@@ -1,47 +1,33 @@
-let express = require('express'),
-  cors = require('cors'),
-  mongoose = require('mongoose'),
-  database = require('./database'),
-  bodyParser = require('body-parser');
+const express = require('express');
+const axios = require('axios');
+const port = 3000
+const servers = [];
 
-// Connect mongoDB
-mongoose.Promise = global.Promise;
-mongoose.connect(database.db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log("Database connected")
-  },
-  error => {
-    console.log("Database could't be connected to: " + error)
-  }
-)
+const handler = async (req, res) => {
+    try {
 
-const orderAPI = require('../backend/routes/order.route')
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-app.use(cors());
+        const targetServer = servers.map(v => v).sort((a, b) => a.nbReq - b.nbReq)[0].serviceName
+        console.log(`[TARGET] ${targetServer}`)
+        const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer, port }})
+        res.json(resp.data)
+    } catch (e){
+        console.log(e)
+    }
+};
 
-// API
-app.use('/api', orderAPI)
+const register = (req, res) => {
+    servers.push(req.body)
+    res.end()
+}
 
-// Create port
-const port = process.env.PORT || 4001;
-const server = app.listen(port, () => {
-  console.log('Connected to port ' + port)
-})
+const server = express().use(express.json()).get(/^\/api\/.+$/, handler).post(/^\/api\/.+$/, handler).post('/register', register);
+server.listen(port)
 
-// Find 404
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
-// error handler
-app.use(function (err, req, res, next) {
-  console.error(err.message);
-  if (!err.statusCode) err.statusCode = 500;
-  res.status(err.statusCode).send(err.message);
-});
+setInterval(async () => {
+    servers.forEach( (service, index) => {
+        axios.get(service.healthPoint, {proxy: { host: service.serviceName, port}}).then(({data}) => {
+            servers[index].nbReq = data.nbReq
+            console.log(`${service.serviceName}: ${data.nbReq} nbReq`)
+        })
+    })
+}, 5000)
