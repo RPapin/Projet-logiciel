@@ -11,14 +11,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="student in Students" :key="student._id">
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.email }}</td>
-                        <td>{{ student.phone }}</td>
+                    <tr v-for="order in Orders" :key="order._id">
+                        <td>{{ order.name }}</td>
+                        <td>{{ order.email }}</td>
+                        <td>{{ order.phone }}</td>
                         <td>
-                            <router-link :to="{name: 'edit', params: { id: student._id }}" class="btn btn-success">Edit
+                            <router-link :to="{name: 'edit', params: { id: order._id }}" class="btn btn-success">Edit
                             </router-link>
-                            <button @click.prevent="deleteStudent(student._id)" class="btn btn-danger">Delete</button>
+                            <button @click.prevent="deleteOrder(order._id)" class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -33,25 +33,25 @@
     export default {
         data() {
             return {
-                Students: []
+                Orders: []
             }
         },
         created() {
             let apiURL = 'http://localhost:4000/api';
             axios.get(apiURL).then(res => {
-                this.Students = res.data;
+                this.Orders = res.data;
             }).catch(error => {
                 console.log(error)
             });
         },
         methods: {
-            deleteStudent(id){
-                let apiURL = `http://localhost:4000/api/delete-student/${id}`;
-                let indexOfArrayItem = this.Students.findIndex(i => i._id === id);
+            deleteOrder(id){
+                let apiURL = `http://localhost:4000/api/delete-order/${id}`;
+                let indexOfArrayItem = this.Orders.findIndex(i => i._id === id);
 
                 if (window.confirm("Do you really want to delete?")) {
                     axios.delete(apiURL).then(() => {
-                        this.Students.splice(indexOfArrayItem, 1);
+                        this.Orders.splice(indexOfArrayItem, 1);
                     }).catch(error => {
                         console.log(error)
                     });

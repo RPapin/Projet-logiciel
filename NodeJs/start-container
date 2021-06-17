@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-if [ $# -gt 0 ];then
-    exec gosu www-data "$@"
-fi
