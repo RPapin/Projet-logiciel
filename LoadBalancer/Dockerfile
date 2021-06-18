@@ -7,12 +7,12 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install dependencies
-COPY ./LoadBalancer/package.json .
+COPY ./work/LoadBalancer/package.json .
 RUN npm install
 
 
 # Bundle app source
-COPY ./LoadBalancer .
+COPY ./work/LoadBalancer .
 
 
 # Expose ports.

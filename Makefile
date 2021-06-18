@@ -1,22 +1,22 @@
-# variables
-SUBDIRS = MongoDb NodeJs
+COMPOSE_CONF_PATH=./
 
-#commands
-build:
-	for dir in $(SUBDIRS); do \
-		$(MAKE) -C $$dir build; \
-	done
+up:
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml --env-file ${COMPOSE_CONF_PATH}/.env up
 
-start:
-	for dir in $(SUBDIRS); do \
-		$(MAKE) -C $$dir startd; \
-	done
-
-startd: start
+down:
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml down
 
 stop:
-	for dir in $(SUBDIRS); do \
-		$(MAKE) -C $$dir stop; \
-	done
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml stop
 
-restart: stop startd
+ubfr:
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml up --build --force-recreate
+
+clean: down stop
+
+test:
+	npm run test
+
+build: ubfr
+
+start: up

@@ -2,6 +2,8 @@ FROM node:14.17
 
 LABEL maintainer="g4"
 
+ARG APP_PATH
+
 WORKDIR /home/elective/work
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,16 +11,20 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update \
-    && apt-get install -y sudo gnupg gosu curl wget systemctl ca-certificates zip unzip git libcap2-bin libpng-dev python2 \
-    && npm install mongoose \
+COPY ${APP_PATH}/package.json .
+
+RUN npm install
+
+RUN npm install mongoose \
+    && npm install -g nodemon \
     && npm install -g typescript \
     && npm install -g router \
     && npm install -g vuex \
     && npm install -g @vue/cli \
     && npm install -g lint-formatter \
     && npm install -g dotenv \
-    && npm install express-generator -g 
+    && npm install -g express \
+    && npm install -g express-generator 
 
 RUN groupadd --force www-data
 RUN groupadd --force elective

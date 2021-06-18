@@ -1,0 +1,13 @@
+{
+  "name": "temporary",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start.dev": "nodemon --exec 'vue-cli-service serve'",
+    "serve": "vue-cli-service serve",
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

@@ -1,0 +1,72 @@
+version: "3.9"
+services:
+  # Mongo DB
+  mongodb:
+    container_name: mongodbelective
+    build: 
+      dockerfile: ./Dockerfile
+      context: ./MongoDb
+    volumes:
+      - ./MongoDb/data:/data/db
+    ports:
+      - "27017:27017"
+
+  # Our load balancer
+  loadbalancer:
+    container_name: loadbalancer
+    build: 
+      dockerfile: ./Dockerfile
+      context: ./LoadBalancer
+    volumes:
+      - ./LoadBalancer/work/LoadBalancer:/home/elective/work
+    ports:
+      - "8084:4001"
+
+  # Main application
+  ordereat:
+    container_name: ordereat
+    build: 
+      dockerfile: ./NodeJs/Dockerfile
+      context: ./
+      args:
+        - APP_PATH=./OrderEat/work
+    volumes:
+      - ./OrderEat/work:/home/elective/work
+    ports:
+      - "8080:8080"
+
+  # Our first express backend application
+  express1:
+    container_name: express1
+    build: 
+      dockerfile: ./NodeJs/Dockerfile
+      context: ./
+      args:
+        - APP_PATH=./web-app/backend
+    volumes:
+      - ./web-app/backend:/home/elective/work
+    ports:
+      - "8081:4000"
+    environment:
+      - SERVER_NAME=express1
+      - PORT=4000
+      - LOAD_BALANCER_HOST=loadbalancer
+      - LOAD_BALANCER_PORT=8084
+      
+  # Our second express backend application
+  express2:
+    container_name: express2
+    build: 
+      dockerfile: ./NodeJs/Dockerfile
+      context: ./
+      args:
+        - APP_PATH=./web-app/backend
+    volumes:
+      - ./web-app/backend:/home/elective/work
+    ports:
+      - "8082:4000"
+    environment:
+      - SERVER_NAME=express2
+      - PORT=4000
+      - LOAD_BALANCER_HOST=loadbalancer
+      - LOAD_BALANCER_PORT=8084
