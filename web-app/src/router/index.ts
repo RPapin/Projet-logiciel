@@ -1,26 +1,41 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import CreateComponent from '../components/CreateComponent.vue'
-import EditComponent from '../components/EditComponent.vue'
-import ListComponent from '../components/ListComponent.vue'
+import EditMenu from '@/components/Menu/EditMenu.vue'
+import ListMenu from '@/components/Menu/ListMenu.vue'
+import EditArticle from '@/components/Article/EditArticle.vue'
+import ListArticle from '@/components/Article/ListArticle.vue'
+import Home from '@/components/home.vue'
+// import { Route } from '../interface'
 
 Vue.use(VueRouter)
+
+
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: CreateComponent
+    component: Home
   },
   {
-    path: '/view',
-    name: 'view',
-    component: ListComponent
+    path: '/viewMenu',
+    name: 'viewMenu',
+    component: ListMenu
   },
   {
-    path: '/edit/:id',
-    name: 'edit',
-    component: EditComponent
+    path: '/editMenu/:id',
+    name: 'editMenu',
+    component: EditMenu
+  },
+  {
+    path: '/viewArticle',
+    name: 'viewArticle',
+    component: ListArticle
+  },
+  {
+    path: '/editArticle/:id',
+    name: 'editArticle',
+    component: EditArticle
   }
 ]
 
@@ -29,4 +44,9 @@ const router = new VueRouter({
   routes
 })
 
+//TODO ADD AUTH ROUTE
+// router.beforeEach((to, from, next) => {
+//   if (to.name !== 'Login' && "!isAuthenticated") next({ name: 'Login' })
+//   else next()
+// })
 export default router

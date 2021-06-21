@@ -113,3 +113,6 @@ dist
 # TernJS port file
 .tern-port
 
+MongoDb/data/WiredTiger.wt
+MongoDb/data/mongod.lock
+MongoDb/data/WiredTiger.turtle

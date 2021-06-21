@@ -16,7 +16,6 @@
           "es2015.promise"
       ]
   },
-  "include": [
-      "./src/**/*"
-  ]
+  "include": ["./src/**/*", "./src/**/*.vue"],
+  "exclude": ["./node_modules", "./dist"]
 }

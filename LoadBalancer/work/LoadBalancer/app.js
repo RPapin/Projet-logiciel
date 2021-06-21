@@ -5,7 +5,6 @@ const servers = [];
 
 const handler = async (req, res) => {
     try {
-
         const targetServer = servers.map(v => v).sort((a, b) => a.nbReq - b.nbReq)[0].serviceName
         console.log(`[TARGET] ${targetServer}`)
         const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer, port }})
