@@ -11,20 +11,20 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY ${APP_PATH}/package.json .
+COPY ${APP_PATH}/. .
 
 RUN npm install
 
 RUN npm install mongoose \
     && npm install -g nodemon \
-    && npm install -g typescript \
+    && npm install -g npm-run-all \
+    && npm install -g rimraf \
     && npm install -g router \
     && npm install -g vuex \
-    && npm install -g @vue/cli \
     && npm install -g lint-formatter \
     && npm install -g dotenv \
     && npm install -g express \
-    && npm install -g express-generator 
+    && npm install -g express-generator
 
 RUN groupadd --force www-data
 RUN groupadd --force elective
@@ -33,5 +33,7 @@ RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 ele
 # Expose ports.
 #   - 8080 : nodejs
 EXPOSE 8080
+
+RUN ls -l
 
 CMD [ "npm", "run", "start.dev" ]

@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start.dev": "nodemon --exec 'vue-cli-service serve'",
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "clean": "rimraf dist/*",
+    "tsc": "tsc",
+    "start.dev": "npm-run-all build start"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -32,7 +34,10 @@
     "typescript": "^4.3.2",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^4.46.0"
+    "webpack": "^4.46.0",
+    "ts-node": "^10.0.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.3.4"
   },
   "eslintConfig": {
     "root": true,
