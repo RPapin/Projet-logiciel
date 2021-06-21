@@ -18,7 +18,7 @@ services:
       dockerfile: ./Dockerfile
       context: ./LoadBalancer
     volumes:
-      - ./LoadBalancer/work/LoadBalancer:/home/elective/work
+      - ./LoadBalancer:/home/elective/work
     ports:
       - "8084:4001"
 
@@ -29,9 +29,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./OrderEat/work
+        - APP_PATH=./web-app
     volumes:
-      - ./OrderEat/work:/home/elective/work
+      - ./web-app:/home/elective/work
     ports:
       - "8080:8080"
 
