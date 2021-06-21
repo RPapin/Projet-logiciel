@@ -29,7 +29,7 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app
+        - APP_PATH=./OrderEat
     volumes:
       - ./web-app:/home/elective/work
     ports:
@@ -42,9 +42,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app/backend
+        - APP_PATH=./OrderEat/backend
     volumes:
-      - ./web-app/backend:/home/elective/work
+      - ./OrderEat/backend:/home/elective/work
     ports:
       - "8081:4000"
     environment:
@@ -60,9 +60,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app/backend
+        - APP_PATH=./OrderEat/backend
     volumes:
-      - ./web-app/backend:/home/elective/work
+      - ./OrderEat/backend:/home/elective/work
     ports:
       - "8082:4000"
     environment:
