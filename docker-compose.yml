@@ -31,7 +31,7 @@ services:
       args:
         - APP_PATH=./OrderEat
     volumes:
-      - ./web-app:/home/elective/work
+      - ./OrderEat:/home/elective/work
     ports:
       - "8080:8080"
 
