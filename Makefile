@@ -19,4 +19,9 @@ test:
 
 build: ubfr
 
+simple-build:
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml build
+
+sbuild: simple-build
+
 start: up
