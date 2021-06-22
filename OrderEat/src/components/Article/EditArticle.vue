@@ -1,21 +1,26 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h3 class="text-center">Create Order</h3>
+            <h3 class="text-center">Create Article</h3>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" v-model="order.name" required>
+                    <input type="text" class="form-control" v-model="article.name" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" v-model="order.email" required>
+                    <label>Price</label>
+                    <input type="email" class="form-control" v-model="article.email" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" v-model="order.phone" required>
+                    <label>Image</label>
+                    <UploadImages/>        
+                     <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control" v-model="article.description" required>
                 </div>
 
                 <div class="form-group">
@@ -29,36 +34,48 @@
 <script lang="ts">
     import axios from "axios";
     import Vue from 'vue';
+    import UploadImages from "vue-upload-drop-images"
 
     export default Vue.extend({
+
         data() {
             return {
-                order: {
+                article: {
                    name: '',
-                   email: '',
-                   phone: ''
+                   price: '',
+                   image:'',
+                   description: ''
                 }
             }
         },
         methods: {
             handleSubmitForm() {
-                let apiURL = 'http://localhost:4000/api/create-order';
+                let apiURL = 'http://localhost:4000/api/create-article';
                 
-                axios.post(apiURL, this.order).then(() => {
-                  this.$router.push('/view')
-                  this.order = {
+                axios.post(apiURL, this.article).then(() => {
+                  this.$router.push('/viewArticle')
+                  this.article = {
                     name: '',
-                    email: '',
-                    phone: ''
+                    price: '',
+                    image: '',
+                    description: ''
                   }
                 }).catch(error => {
                     console.log(error)
                 });
+            },
+            handleImages(event){
+                this.article.image = event.target.files[0]
+                console.log(this.article)
             }
+        },
+        components: {
+           UploadImages,
         },
         created: function () {
             // `this` points to the vm instance
             console.log(this.$route.query)
         }
+
     })
 </script>

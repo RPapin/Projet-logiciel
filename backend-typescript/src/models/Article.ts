@@ -2,15 +2,10 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 
 const articleSchema = new Schema({
-  name: {
-    type: String
-  },
-  price: {
-    type: Number
-  },
-  decription: {
-    type: String
-  },
+  name: String,
+  price: Number,
+  image: String,
+  description: String,
 }, {
   collection: 'article'
 })
