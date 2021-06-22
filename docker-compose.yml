@@ -1,15 +1,15 @@
 version: "3.9"
 services:
   # Mongo DB
-  mongodb:
-    container_name: mongodbelective
-    build: 
-      dockerfile: ./Dockerfile
-      context: ./MongoDb
-    volumes:
-      - ./MongoDb/data:/data/db
-    ports:
-      - "27017:27017"
+#  mongodb:
+#    container_name: mongodbelective
+#    build: 
+#      dockerfile: ./Dockerfile
+#      context: ./MongoDb
+#    volumes:
+#      - ./MongoDb/data:/data/db
+#    ports:
+#      - "27017:27017"
 
   # Our load balancer
   loadbalancer:
@@ -29,9 +29,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app
+        - APP_PATH=./OrderEat
     volumes:
-      - ./web-app:/home/elective/work
+      - ./OrderEat/src:/home/elective/work/src
     ports:
       - "8080:8080"
 
@@ -42,9 +42,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app/backend
+        - APP_PATH=./backend-typescript
     volumes:
-      - ./web-app/backend:/home/elective/work
+      - ./backend-typescript/src:/home/elective/work/src
     ports:
       - "8081:4000"
     environment:
@@ -60,9 +60,9 @@ services:
       dockerfile: ./NodeJs/Dockerfile
       context: ./
       args:
-        - APP_PATH=./web-app/backend
+        - APP_PATH=./backend-typescript
     volumes:
-      - ./web-app/backend:/home/elective/work
+      - ./backend-typescript/src:/home/elective/work/src
     ports:
       - "8082:4000"
     environment:
