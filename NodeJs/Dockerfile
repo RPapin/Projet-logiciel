@@ -30,10 +30,6 @@ RUN groupadd --force www-data
 RUN groupadd --force elective
 RUN useradd -ms /bin/bash --no-user-group --groups www-data,elective -u 1337 elective
 
-# Expose ports.
-#   - 8080 : nodejs
-EXPOSE 8080
-
 RUN ls -l
 
 CMD [ "npm", "run", "start.dev" ]

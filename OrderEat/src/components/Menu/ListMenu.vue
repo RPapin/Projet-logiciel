@@ -37,7 +37,7 @@
             }
         },
         created() {
-            let apiURL = 'http://localhost:4000/api';
+            let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api';
             axios.get(apiURL).then(res => {
                 this.Orders = res.data;
             }).catch(error => {
@@ -46,7 +46,7 @@
         },
         methods: {
             deleteOrder(id){
-                let apiURL = `http://localhost:4000/api/delete-order/${id}`;
+                let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-order/${id}`;
                 let indexOfArrayItem = this.Orders.findIndex(i => i._id === id);
 
                 if (window.confirm("Do you really want to delete?")) {

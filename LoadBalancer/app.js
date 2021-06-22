@@ -5,9 +5,9 @@ const servers = [];
 
 const handler = async (req, res) => {
     try {
-        const targetServer = servers.map(v => v).sort((a, b) => a.nbReq - b.nbReq)[0].serviceName
-        console.log(`[TARGET] ${targetServer}`)
-        const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer, port }})
+        const targetServer = servers.map(v => v).sort((a, b) => b.health - a.health)[0]
+        console.log(`[TARGET] ${targetServer.serviceName}`)
+        const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
         res.json(resp.data)
     } catch (e){
         console.log(e)
@@ -16,6 +16,7 @@ const handler = async (req, res) => {
 
 const register = (req, res) => {
     servers.push(req.body)
+    console.log("[Register] "+req.body.serviceName+":"+req.body.servicePort)
     res.end()
 }
 
@@ -23,10 +24,14 @@ const server = express().use(express.json()).get(/^\/api\/.+$/, handler).post(/^
 server.listen(port)
 
 setInterval(async () => {
-    servers.forEach( (service, index) => {
-        axios.get(service.healthPoint, {proxy: { host: service.serviceName, port}}).then(({data}) => {
-            servers[index].nbReq = data.nbReq
-            console.log(`${service.serviceName}: ${data.nbReq} nbReq`)
+    try{
+        servers.forEach( (service, index) => {
+            axios.get(service.healthPoint, {proxy: { host: service.serviceName, port: service.servicePort}}).then(({data}) => {
+                servers[index].health = data.health
+                console.log(`${service.serviceName}: ${data.health} health`)
+            })
         })
-    })
+    } catch(e) {
+        console.log("[ERROR] "+e)
+    }
 }, 5000)
