@@ -16,7 +16,7 @@ import os from 'os'
 
 const UUID = uuidv4()
 const SERVER_NAME = "Backend_" + UUID
-const HEALTH_PATH = '/health'
+const HEALTH_PATH = process.env.HEALTH_PATH
 
 dotEnv.config()
 // connect SQL

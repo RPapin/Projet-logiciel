@@ -1,3 +1,8 @@
+import dotEnv from 'dotenv'
+import axios from 'axios'
+
+const HEALTH_PATH = process.env.HEALTH_PATH
+
 // Load balancer registration
 
 export function healthCompute(){
