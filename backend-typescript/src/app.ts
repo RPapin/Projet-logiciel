@@ -1,5 +1,6 @@
 import express, { NextFunction } from 'express'
 import fileUpload  from 'express-fileupload'
+import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
 
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -70,33 +71,5 @@ app.use( (err: any, req: any, res: any, next: any) => {
   if (!err.statusCode) err.statusCode = 500;
   res.status(err.statusCode).send(err.message);
 });
-
-// Load balancer registration
-
-function healthCompute(){
-  return os.freemem()/os.totalmem()
-}
-
-function LoadBalancerRegistration (){
-  console.log(process.env.SERVER_NAME+' is trying to registered on '+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT)
-  try {
-      axios.post('/register',
-          {serviceName: process.env.SERVER_NAME, servicePort: port, healthPoint: HEALTH_PATH, health: healthCompute()},
-          { proxy:
-              {
-                  host: process.env.LOAD_BALANCER_HOST,
-                  port: parseInt(process.env.LOAD_BALANCER_PORT, 10),
-              }
-          }
-      ).then(response => {
-        console.log(process.env.SERVER_NAME+' is registered on '+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT)
-      }).catch(error => {
-        console.log(error)
-      })
-
-  } catch (e) {
-      console.log(e)
-  }
-}
 
 LoadBalancerRegistration()
