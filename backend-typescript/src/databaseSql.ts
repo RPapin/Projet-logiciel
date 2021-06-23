@@ -18,7 +18,7 @@ const config = {
     }
 };
 const connection = new tedious.Connection(config);
-connection.on('connect', function(err: Error) {
+connection.on('connect', (err: Error) => {
     if(err) console.log("Error while sql connection " + err);
     // If no error, then good to proceed.
     else console.log("Connected");

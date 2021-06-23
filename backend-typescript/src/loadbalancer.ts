@@ -2,6 +2,7 @@ import dotEnv from 'dotenv'
 import axios from 'axios'
 import os from 'os'
 
+const port = process.env.PORT || 4000;
 const HEALTH_PATH = process.env.HEALTH_PATH
 
 // Load balancer registration
