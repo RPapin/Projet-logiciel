@@ -42,7 +42,7 @@
         },
         methods: {
             handleSubmitForm() {
-                let apiURL = 'http://localhost:4000/api/create-order';
+                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-order';
                 
                 axios.post(apiURL, this.order).then(() => {
                   this.$router.push('/view')

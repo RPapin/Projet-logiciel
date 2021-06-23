@@ -1,15 +1,15 @@
 version: "3.9"
 services:
   # Mongo DB
-#  mongodb:
-#    container_name: mongodbelective
-#    build: 
-#      dockerfile: ./Dockerfile
-#      context: ./MongoDb
-#    volumes:
-#      - ./MongoDb/data:/data/db
-#    ports:
-#      - "27017:27017"
+  mongodb:
+    container_name: mongodbelective
+    build: 
+      dockerfile: ./Dockerfile
+      context: ./MongoDb
+    volumes:
+      - ./MongoDb/data:/data/db
+    ports:
+      - "27017:27017"
 
   # Our load balancer
   loadbalancer:
@@ -20,7 +20,9 @@ services:
     volumes:
       - ./LoadBalancer:/home/elective/work
     ports:
-      - "8084:4001"
+      - "8084:3000"
+    depends_on:
+      - "mongodb"
 
   # Main application
   ordereat:
@@ -32,8 +34,12 @@ services:
         - APP_PATH=./OrderEat
     volumes:
       - ./OrderEat/src:/home/elective/work/src
+      - ./OrderEat/.env:/home/elective/work/.env
     ports:
       - "8080:8080"
+    depends_on:
+      - "mongodb"
+      - "loadbalancer"
 
   # Our first express backend application
   express1:
@@ -45,13 +51,17 @@ services:
         - APP_PATH=./backend-typescript
     volumes:
       - ./backend-typescript/src:/home/elective/work/src
+      - ./backend-typescript/.env:/home/elective/work/.env
     ports:
       - "8081:4000"
     environment:
       - SERVER_NAME=express1
       - PORT=4000
       - LOAD_BALANCER_HOST=loadbalancer
-      - LOAD_BALANCER_PORT=8084
+      - LOAD_BALANCER_PORT=3000
+    depends_on:
+      - "mongodb"
+      - "loadbalancer"
       
   # Our second express backend application
   express2:
@@ -63,10 +73,14 @@ services:
         - APP_PATH=./backend-typescript
     volumes:
       - ./backend-typescript/src:/home/elective/work/src
+      - ./backend-typescript/.env:/home/elective/work/.env
     ports:
       - "8082:4000"
     environment:
       - SERVER_NAME=express2
       - PORT=4000
       - LOAD_BALANCER_HOST=loadbalancer
-      - LOAD_BALANCER_PORT=8084
+      - LOAD_BALANCER_PORT=3000
+    depends_on:
+      - "mongodb"
+      - "loadbalancer"
