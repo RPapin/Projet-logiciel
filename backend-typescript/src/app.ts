@@ -10,9 +10,7 @@ import bodyParser from  'body-parser'
 import orderAPI from './routes/order.route'
 import userAPI from './routes/user.route'
 import createError from 'http-errors'
-import axios from 'axios'
 import {v4 as uuidv4} from 'uuid'
-import os from 'os'
 
 const UUID = uuidv4()
 const SERVER_NAME = "Backend_" + UUID

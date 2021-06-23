@@ -1,5 +1,6 @@
 import dotEnv from 'dotenv'
 import axios from 'axios'
+import os from 'os'
 
 const HEALTH_PATH = process.env.HEALTH_PATH
 
