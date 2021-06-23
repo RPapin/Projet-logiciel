@@ -5,11 +5,11 @@ import ListMenu from '@/components/Menu/ListMenu.vue'
 import EditArticle from '@/components/Article/EditArticle.vue'
 import ListArticle from '@/components/Article/ListArticle.vue'
 import Home from '@/components/home.vue'
+import Login from '@/components/User/Login.vue'
+import CreateProfile from '@/components/User/CreateProfile.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
-
-
 
 const routes = [
   {
@@ -36,6 +36,16 @@ const routes = [
     path: '/editArticle/:id',
     name: 'editArticle',
     component: EditArticle
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/sign-up',
+    name: 'sign-up',
+    component: CreateProfile
   }
 ]
 

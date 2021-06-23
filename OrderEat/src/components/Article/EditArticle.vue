@@ -14,8 +14,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Image</label>
-                    <UploadImages/>        
+                    <label>Image</label>      
                      <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
                 </div>
                 <div class="form-group">
@@ -34,7 +33,6 @@
 <script lang="ts">
     import axios from "axios";
     import Vue from 'vue';
-    import UploadImages from "vue-upload-drop-images"
 
     export default Vue.extend({
 
@@ -70,7 +68,6 @@
             }
         },
         components: {
-           UploadImages,
         },
         created: function () {
             // `this` points to the vm instance

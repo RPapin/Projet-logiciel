@@ -15,7 +15,7 @@
             <router-link class="nav-link pr-3" to="/viewArticle">Voir mes articles</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Se connecter</router-link>
+            <router-link class="nav-link" to="/login">Se connecter</router-link>
           </li>
         </ul>
       </div>

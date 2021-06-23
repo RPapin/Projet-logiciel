@@ -4,7 +4,7 @@ import OrderModel from '../models/Order'
 const orderRoute = express.Router();
 
 
-orderRoute.route('/').get((req, res, next) => {
+orderRoute.route('/get-all-order').get((req, res, next) => {
     OrderModel.find((error, data) => {
      if (error) {
        return next(error)
@@ -13,6 +13,8 @@ orderRoute.route('/').get((req, res, next) => {
      }
    })
  })
+
+
 
  orderRoute.route('/create-order').post((req, res, next) => {
     OrderModel.create(req.body, (error, data) => {
@@ -24,7 +26,7 @@ orderRoute.route('/').get((req, res, next) => {
   })
 });
 
-orderRoute.route('/edit-order/:id').get((req, res, next) => {
+orderRoute.route('/get-order/:id').get((req, res, next) => {
    OrderModel.findById(req.params.id, (error: NativeError, data: Document<any, any>) => {
     if (error) {
       return next(error)

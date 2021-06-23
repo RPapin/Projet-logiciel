@@ -116,5 +116,5 @@ dist
 MongoDb/data/WiredTiger.wt
 MongoDb/data/mongod.lock
 MongoDb/data/WiredTiger.turtle
-
+backend-typeScript/public/*
 WiredTiger.lock
