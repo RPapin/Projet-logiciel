@@ -46,6 +46,8 @@ app.use(fileUpload());
 // API
 app.use('/api', orderAPI)
 app.use('/api', userAPI)
+//AUTH
+
 
 // Health route for load balancing
 app.get(HEALTH_PATH, (req, res) => {
