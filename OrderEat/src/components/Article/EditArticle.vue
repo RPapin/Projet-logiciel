@@ -62,7 +62,7 @@
                     console.log(error)
                 });
             },
-            handleImages(event){
+            handleImages(event:any){
                 this.article.image = event.target.files[0]
                 console.log(this.article)
             }

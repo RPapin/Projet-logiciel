@@ -1,24 +1,37 @@
 {
   "compilerOptions": {
-      "outDir": "./dist/",
-      "sourceMap": true,
-      "strict": true,
-      "noImplicitReturns": true,      
-      "experimentalDecorators": true,
-      "allowSyntheticDefaultImports": true,
-      "noImplicitAny": false,
-      "module": "es2015",
-      "moduleResolution": "node",
-      "target": "es5",
-      "lib": [
-          "dom",
-          "es5",
-          "es2015.promise"
+    "target": "es5",
+    "module": "esnext",
+    "noImplicitReturns": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "webpack-env"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
       ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
   },
-  "include": ["./src/**/*", "./src/**/*.vue"],
-  "exclude": ["./node_modules", "./dist"],
-  "files": [
-    "./src/vue-shims.d.ts"
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

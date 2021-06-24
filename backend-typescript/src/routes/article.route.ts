@@ -5,15 +5,18 @@ import {authenticateToken} from '../authJWT'
 const articleRoute = express.Router();
 
 
-articleRoute.route('/get-all-article').get(authenticateToken, (req, res, next) => {
-    console.log('auth succeded')
+articleRoute.route('/get-all-article').get(authenticateToken, (req: any, res, next) => {
+    
     ArticleModel.find((error, data) => {
-     if (error) {
-       return next(error)
-     } else {
-       res.json(data)
-     }
-   })
+      if (error) {
+        return next(error)
+      } else {
+        res.json({
+          articles : data,
+          refreshToken : req.refreshToken
+        })
+      }
+    })
  })
 
 

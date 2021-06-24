@@ -1,4 +1,4 @@
-COMPOSE_CONF_PATH=./
+COMPOSE_CONF_PATH=.
 
 up:
 	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml --env-file ${COMPOSE_CONF_PATH}/.env up
