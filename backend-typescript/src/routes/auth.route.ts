@@ -8,7 +8,7 @@ const Request = tedious.Request;
 
  userRoute.route('/create-user').post((req: any, res, next) => {
 
-    //INSERT IN THE DATABASE
+    // INSERT IN THE DATABASE
     // const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}', null, null)`
     // console.log(sql)
     // const request = new Request(sql, function(err) {
@@ -18,7 +18,7 @@ const Request = tedious.Request;
     // request.on('done', function(rowCount, more) {
     //     res.json(rowCount)
     // });
-    
+
     // sqlConnector.execSql(request);
  })
 

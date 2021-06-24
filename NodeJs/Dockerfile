@@ -13,6 +13,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY ${APP_PATH}/. .
 
+RUN apt-get update && \
+    apt-get install -y unixodbc-dev
+
 RUN npm install
 
 RUN npm install mongoose \
