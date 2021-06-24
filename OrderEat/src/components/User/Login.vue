@@ -47,6 +47,18 @@
                     console.log(error)
                 });
             }
+        },
+        created() {
+            // let apiURL = 'http://localhost:4000/login';
+                
+            //     axios.get(apiURL, {
+            //         headers: {'Access-Control-Allow-Origin': '*'},
+                    
+            //     }).then(() => {
+            //     //   this.$router.push('/view')
+            //     }).catch(error => {
+            //         console.log(error)
+            //     })
         }
     })
 </script>

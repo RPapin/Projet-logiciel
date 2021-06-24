@@ -11,14 +11,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="order in Orders" :key="order._id">
-                        <td>{{ order.name }}</td>
-                        <td>{{ order.email }}</td>
-                        <td>{{ order.phone }}</td>
+                    <tr v-for="article in Articles" :key="article._id">
+                        <td>{{ article.name }}</td>
+                        <td>{{ article.email }}</td>
+                        <td>{{ article.phone }}</td>
                         <td>
-                            <router-link :to="{name: 'edit', params: { id: order._id }}" class="btn btn-success">Edit
+                            <router-link :to="{name: 'edit', params: { id: article._id }}" class="btn btn-success">Edit
                             </router-link>
-                            <button @click.prevent="deleteOrder(order._id)" class="btn btn-danger">Delete</button>
+                            <button @click.prevent="deleteArticle(article._id)" class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -33,25 +33,33 @@
     export default {
         data() {
             return {
-                Orders: []
+                Articles: []
             }
         },
         created() {
-            let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api';
-            axios.get(apiURL).then(res => {
-                this.Orders = res.data;
+            //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
+            let apiURL = 'http://localhost:4000/api/get-all-article';
+            let authToken = localStorage.getItem('AUTH_TOKEN')
+            console.log(authToken)
+            axios.get(apiURL, {
+                headers : {
+                    Authorization: "Bearer " + authToken
+                }
+            }).then(res => {
+                this.Articles = res.data;
+                console.log(res.data)
             }).catch(error => {
                 console.log(error)
             });
         },
         methods: {
-            deleteOrder(id){
-                let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-order/${id}`;
-                let indexOfArrayItem = this.Orders.findIndex(i => i._id === id);
+            deleteArticle(id){
+                let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-article/${id}`;
+                let indexOfArrayItem = this.Articles.findIndex(i => i._id === id);
 
                 if (window.confirm("Do you really want to delete?")) {
                     axios.delete(apiURL).then(() => {
-                        this.Orders.splice(indexOfArrayItem, 1);
+                        this.Articles.splice(indexOfArrayItem, 1);
                     }).catch(error => {
                         console.log(error)
                     });

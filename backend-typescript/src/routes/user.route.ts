@@ -2,6 +2,7 @@ import express from 'express'
 import * as tedious from 'tedious';
 import sqlConnector from '../databaseSql'
 import path from 'path';
+import {generateAccessToken} from '../authJWT';
 
 const userRoute = express.Router();
 const Request = tedious.Request;
@@ -35,6 +36,7 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     sqlConnector.execSql(request);
  })
  userRoute.route('/create-user').post((req: any, res, next) => {
+
     let profilePictureName = 'default-profile-picture.png'
     if (req.files) {
         const myFile = req.files.file;
@@ -52,19 +54,21 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     }
     const body = JSON.parse(req.body.data)
     body.sponsorship = body.sponsorship === "" ? null : '"' + body.sponsorship + '"'
-
+    //Generate JWT token
+    const token = generateAccessToken(body);
     //INSERT IN THE DATABASE
-    const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}', null, null)`
-    console.log(sql)
+    const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}', null, null)`//'${token}'
     const request = new Request(sql, function(err) {
-    if (err) {
-        console.log(err);}
+        if (err) {
+            console.log(err);
+            res.status(500).send({ msg: "Error occured : " + err });
+        } else {
+        console.log('New user has been inserted')
+        res.json({token : token})
+        }
     });
-    request.on('done', function(rowCount, more) {
-        res.json(rowCount)
-    });
-    
     sqlConnector.execSql(request);
+
  })
 
 export default userRoute

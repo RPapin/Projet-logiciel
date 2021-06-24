@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
-                    <input type="text" class="form-control" v-model="user.phone" >
+                    <input type="number" class="form-control" v-model="user.phone" >
                 </div>
                 <div class="form-group">
                     <label>Code de parainage</label>
@@ -74,8 +74,10 @@
                         'accept': 'application/json',
                         'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                     }
-                }).then(() => {
-                    // this.$router.push('/')
+                }).then((res) => {
+                    console.log(res.data)
+                    localStorage.setItem('AUTH_TOKEN', res.data.token)
+                    this.$router.push('/viewArticle')
                 }).catch(error => {
                     console.log(error)
                 });
