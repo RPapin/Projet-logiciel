@@ -13,7 +13,7 @@
     "start": "ts-node .",
     "devs": "nodemon --watch src -e ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start.dev": "npm-run-all build start"
+    "start.dev": "nodemon -L src/app.ts"
   },
   "author": "",
   "license": "ISC",
