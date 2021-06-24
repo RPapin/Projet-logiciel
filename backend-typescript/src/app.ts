@@ -3,20 +3,15 @@ import fileUpload  from 'express-fileupload'
 // import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import dotEnv from 'dotenv'
 import database from './databaseMongo'
 import bodyParser from  'body-parser'
 import orderAPI from './routes/order.route'
 import articleAPI from './routes/article.route'
 import userAPI from './routes/user.route'
 import createError from 'http-errors'
-import {v4 as uuidv4} from 'uuid'
 
-const UUID = uuidv4()
-const SERVER_NAME = "Backend_" + UUID
-const HEALTH_PATH = process.env.HEALTH_PATH
 
-dotEnv.config()
+const HEALTH_PATH = environment.healthPath
 // connect SQL
 import sqlConnector from './databaseSql'
 sqlConnector.connect()
@@ -64,9 +59,9 @@ app.use((req: any, res: any, next: NextFunction) => {
 
 // error handler
 app.use( (err: any, req: any, res: any, next: any) => {
-  console.error(err.message);
+  console.error("[ERROR]"+err.message);
   if (!err.statusCode) err.statusCode = 500;
   res.status(err.statusCode).send(err.message);
 });
 
-// LoadBalancerRegistration()
+LoadBalancerRegistration()

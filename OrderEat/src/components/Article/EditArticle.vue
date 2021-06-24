@@ -4,22 +4,32 @@
             <h3 class="text-center">Create Article</h3>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
+                    <label>Type</label>
+                    <select v-model="article.type">
+                        <option disabled value="">Choose</option>
+                        <option>Food</option>
+                        <option>Sauce</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" v-model="article.name" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Price</label>
-                    <input type="email" class="form-control" v-model="article.email" required>
+                    <label>Price ($)</label>
+                    <input type="number" min="0" max="10000" step="0.01" class="form-control" v-model="article.price" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Image</label>      
-                     <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
+                    <label>Estimated preparation time (min)</label>
+                    <input type="number" min="0" max="60" step="1" class="form-control" v-model="menu.estimation_time" required>
                 </div>
+
                 <div class="form-group">
-                    <label>Description</label>
-                    <input type="text" class="form-control" v-model="article.description" required>
+                    <label>Picture</label>      
+                     <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
                 </div>
 
                 <div class="form-group">
@@ -39,10 +49,11 @@
         data() {
             return {
                 article: {
+                   type: '',
                    name: '',
                    price: '',
-                   image:'',
-                   description: ''
+                   estimation_time: '',
+                   picture:''
                 }
             }
         },

@@ -1,13 +1,13 @@
 import * as tedious from 'tedious';
-import dotEnv from 'dotenv'
-dotEnv.config()
+import {environment} from './environment'
+
 const config = {
     server: 'ordereat-sqlserver.database.windows.net',  // update me
     authentication: {
         type: 'default',
         options: {
-            userName: process.env.SQL_USERNAME, // update me
-            password: process.env.SQL_PWD  // update me
+            userName: environment.sql.username, // update me
+            password: environment.sql.password  // update me
         }
     },
     options: {

@@ -18,7 +18,7 @@ services:
       dockerfile: ./Dockerfile
       context: ./LoadBalancer
     volumes:
-      - ./LoadBalancer:/home/elective/work
+      - ./LoadBalancer/app.js:/usr/src/app/app.js
     ports:
       - "8084:3000"
     depends_on:

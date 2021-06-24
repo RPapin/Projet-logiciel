@@ -12,6 +12,9 @@ stop:
 ubfr:
 	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml up --build --force-recreate
 
+ufr:
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml up --force-recreate
+
 clean: down stop
 
 test:
