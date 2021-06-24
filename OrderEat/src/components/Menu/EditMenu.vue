@@ -25,10 +25,10 @@
 
                 <div class="form-group">
                     <label>Composition</label>
-                    <div id="composition_item_{{ product.id }}" class="composition_item" v-for="(product,index) in products">
-                        <input type="checkbox" id="checkbox_{{ product.id }}" value="{{ product.id }}" v-model="checkedProducts">
-                        <label for="checkbox_{{ product.id }}">{{ product.name }}</label>
-                        <input type="number" id="quantity_product_{{ product.id }}" min="1" max="100" step="1" class="form-control" required>
+                    <div v-bind:id="'composition_item_' + product.id" class="composition_item" v-for="product in products" :key="product.id">
+                        <input type="checkbox" :id="'checkbox_' + product.id" :value="product.id" v-model="checkedProducts">
+                        <label :for="'checkbox_' + product.id">{{ product.name }}</label>
+                        <input type="number" :id="'quantity_product_' + product.id" min="1" max="100" step="1" class="form-control" required>
                     </div>
                 </div>
 
