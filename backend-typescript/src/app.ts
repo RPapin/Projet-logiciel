@@ -2,12 +2,15 @@ import express, { NextFunction } from 'express'
 import fileUpload  from 'express-fileupload'
 import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
 import {environment} from './environment'
+import {authConfig} from './auth.config'
+import {auth, requiresAuth} from 'express-openid-connect'
 
 import cors from 'cors'
 import mongoose from 'mongoose'
 import database from './databaseMongo'
 import bodyParser from  'body-parser'
 import orderAPI from './routes/order.route'
+import articleAPI from './routes/article.route'
 import userAPI from './routes/user.route'
 import createError from 'http-errors'
 
@@ -22,7 +25,7 @@ mongoose.connect(database.db, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-    console.log("Database connected")
+    console.log("Mongo connected")
   },
   error => {
     console.log("Database could't be connected to: " + error)
@@ -39,14 +42,26 @@ app.use(cors());
 app.use(fileUpload());
 // API
 app.use('/api', orderAPI)
+app.use('/api', articleAPI)
 app.use('/api', userAPI)
-// AUTH
+//AUTH
+// app.use(auth(authConfig));
+// app.get('/profile', requiresAuth(), (req, res) => {
+//   res.send(JSON.stringify(req.oidc.user));
+// });
+//Call when the user logout
+app.get('/callback', requiresAuth(), (req, res) => {
+  res.send('Logged out');
+});
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
 
-
-// Health route for load balancing
-app.get(HEALTH_PATH, (req, res) => {
-    res.status(200).json({health: healthCompute()})
-})
+// // Health route for load balancing
+// app.get(HEALTH_PATH, (req, res) => {
+//     res.status(200).json({health: healthCompute()})
+// })
 
 // Create port
 const port = process.env.PORT || 4000;
