@@ -1,6 +1,7 @@
 import express, { NextFunction } from 'express'
 import fileUpload  from 'express-fileupload'
-// import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
+import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
+import {environment} from './environment'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import database from './databaseMongo'
