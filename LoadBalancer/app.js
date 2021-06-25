@@ -29,6 +29,8 @@ setInterval(async () => {
             axios.get(service.healthPoint, {proxy: { host: service.serviceName, port: service.servicePort}}).then(({data}) => {
                 servers[index].health = data.health
                 console.log(`${service.serviceName}: ${data.health} health`)
+            }).catch(error => {
+                servers.remove(index)
             })
         })
     } catch(e) {
