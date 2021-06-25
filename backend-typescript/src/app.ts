@@ -11,7 +11,7 @@ import userAPI from './routes/user.route'
 import createError from 'http-errors'
 
 
-const HEALTH_PATH = environment.healthPath
+//const HEALTH_PATH = environment.healthPath
 // connect SQL
 import sqlConnector from './databaseSql'
 sqlConnector.connect()
@@ -64,4 +64,4 @@ app.use( (err: any, req: any, res: any, next: any) => {
   res.status(err.statusCode).send(err.message);
 });
 
-LoadBalancerRegistration()
+//LoadBalancerRegistration()
