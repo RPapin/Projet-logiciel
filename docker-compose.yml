@@ -3,13 +3,35 @@ services:
   # Mongo DB
   mongodb:
     container_name: mongodbelective
+    image: mongo
+    restart: always
     build: 
-      dockerfile: ./Dockerfile
       context: ./MongoDb
     volumes:
-      - ./MongoDb/data:/data/db
+      - mongodata:/data/db
+      - ./MongoDb/scripts:/docker-entrypoint-initdb.d
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ordereat
+      - MONGO_INITDB_ROOT_PASSWORD=adminEAT123*
+      - MONGO_INITDB_DATABASE=OrderEATMDB
+
+  # Mongo express
+  mongo-express:
+    container_name: mongoexpress
+    image: mongo-express
+    restart: always
+    ports:
+      - "8085:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=ordereat
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=adminEAT123*
+      - ME_CONFIG_MONGODB_SERVER=mongodbelective
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
 
   # Our load balancer
   loadbalancer:
@@ -68,6 +90,7 @@ services:
     depends_on:
       - "mongodb"
       - "loadbalancer"
+      - "redis"
       
   # Our second express backend application
   express2:
@@ -90,3 +113,7 @@ services:
     depends_on:
       - "mongodb"
       - "loadbalancer"
+      - "redis"
+
+volumes:
+  mongodata:
