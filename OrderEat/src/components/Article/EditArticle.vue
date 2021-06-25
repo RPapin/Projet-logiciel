@@ -1,39 +1,40 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h3 class="text-center">Create Article</h3>
+            <h3 class="text-center">Créer un Article</h3>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Type</label>
                     <select v-model="article.type">
-                        <option disabled value="">Choose</option>
-                        <option>Food</option>
+                        <option disabled value="">Choisissez</option>
+                        <option>Nourriture</option>
                         <option>Sauce</option>
+                        <option>Boisson</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Name</label>
+                    <label>Nom</label>
                     <input type="text" class="form-control" v-model="article.name" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Price ($)</label>
+                    <label>Prix ($)</label>
                     <input type="number" min="0" max="10000" step="0.01" class="form-control" v-model="article.price" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Estimated preparation time (min)</label>
+                    <label>Temps de préparation estimé (min)</label>
                     <input type="number" min="0" max="60" step="1" class="form-control" v-model="menu.estimation_time" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Picture</label>      
+                    <label>Image</label>      
                      <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-danger btn-block">Create</button>
+                    <button class="btn btn-danger btn-block">Créer</button>
                 </div>
             </form>
         </div>
