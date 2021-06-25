@@ -40,6 +40,12 @@ services:
     depends_on:
       - "mongodb"
       - "loadbalancer"
+  # Cache DB    
+  redis:
+    container_name: redis-cache
+    image: redis
+    ports:
+      - '6379:6379'
 
   # Our first express backend application
   express1:

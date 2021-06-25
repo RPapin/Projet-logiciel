@@ -29,7 +29,7 @@
 
 <script lang="ts">
     import axios from "axios";
-
+    import ApiService from "../../services/apiService"
     export default {
         data() {
             return {
@@ -37,25 +37,18 @@
             }
         },
         created() {
+            const service = new ApiService()
             //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
-            let apiURL = 'http://localhost:4000/api/get-all-article';
-            let authToken = localStorage.getItem('AUTH_TOKEN')
-            console.log(authToken)
-            axios.get(apiURL, {
-                headers : {
-                    Authorization: "Bearer " + authToken
-                }
-            }).then(res => {
-                this.Articles = res.data;
-                console.log(res.data)
-            }).catch(error => {
-                console.log(error)
-            });
+            let apiURL:string = 'get-all-article';
+            let authToken:string = localStorage.getItem('AUTH_TOKEN') === null ? "" : localStorage.getItem('AUTH_TOKEN')
+            
+            let data:any = service.getCall(apiURL, authToken);
+            this.Articles = data.articles
         },
         methods: {
-            deleteArticle(id){
+            deleteArticle(id:any){
                 let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-article/${id}`;
-                let indexOfArrayItem = this.Articles.findIndex(i => i._id === id);
+                let indexOfArrayItem = this.Articles.findIndex((i:any) => i._id === id);
 
                 if (window.confirm("Do you really want to delete?")) {
                     axios.delete(apiURL).then(() => {

@@ -2,6 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3 class="text-center">Se connecter</h3>
+            <span>{{this.error}}</span>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Email</label>
@@ -25,27 +26,33 @@
 </template>
 
 <script lang="ts">
-    import axios from "axios";
     import Vue from 'vue';
-
+    import ApiService from "../../services/apiService"
     export default Vue.extend({
         data() {
             return {
                 user: {
                    email: '',
                    password: ''
-                }
+                },
+                error : ''
             }
         },
         methods: {
-            handleSubmitForm() {
-                let apiURL = 'http://localhost:4000/api/create-user';
+           async handleSubmitForm() {
+                let apiService = new ApiService()
+                let apiURL = 'login-user';
+                let res = await apiService.postCall(apiURL, JSON.parse(JSON.stringify(this.user)))
+                console.log(res)
+                if('error' in res){
+                    this.error = res.error
+                } else {
+                    //save user info
+                    localStorage.setItem('AUTH_TOKEN', res.token)
+                    this.$router.push('/')
+                }
                 
-                axios.post(apiURL, this.user).then(() => {
-                  this.$router.push('/view')
-                }).catch(error => {
-                    console.log(error)
-                });
+                //
             }
         },
         created() {

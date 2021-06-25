@@ -1,10 +1,6 @@
 import express, { NextFunction } from 'express'
 import fileUpload  from 'express-fileupload'
-import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
-import {environment} from './environment'
-import {authConfig} from './auth.config'
-import {auth, requiresAuth} from 'express-openid-connect'
-
+// import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import database from './databaseMongo'
@@ -44,19 +40,6 @@ app.use(fileUpload());
 app.use('/api', orderAPI)
 app.use('/api', articleAPI)
 app.use('/api', userAPI)
-//AUTH
-// app.use(auth(authConfig));
-// app.get('/profile', requiresAuth(), (req, res) => {
-//   res.send(JSON.stringify(req.oidc.user));
-// });
-//Call when the user logout
-app.get('/callback', requiresAuth(), (req, res) => {
-  res.send('Logged out');
-});
-// req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
 
 // // Health route for load balancing
 // app.get(HEALTH_PATH, (req, res) => {
