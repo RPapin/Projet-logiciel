@@ -1,3 +1,3 @@
 export default {
-   db: 'mongodb://localhost:27017/ordereat'
+   db: 'mongodb://mongodb:27017/OrderEATMDB'
 }

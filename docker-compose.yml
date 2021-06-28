@@ -89,6 +89,8 @@ services:
       - "mongodb"
       - "loadbalancer"
       - "redis"
+    links:
+      - redis
       
   # Our second express backend application
   express2:
@@ -112,6 +114,8 @@ services:
       - "mongodb"
       - "loadbalancer"
       - "redis"
+    links:
+      - redis
 
 volumes:
   mongodata:

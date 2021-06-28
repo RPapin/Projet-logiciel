@@ -42,10 +42,10 @@ app.use('/api', orderAPI)
 app.use('/api', articleAPI)
 app.use('/api', userAPI)
 
-// // Health route for load balancing
-// app.get(HEALTH_PATH, (req, res) => {
-//     res.status(200).json({health: healthCompute()})
-// })
+// Health route for load balancing
+app.get(HEALTH_PATH, (req, res) => {
+  res.status(200).json({health: healthCompute()})
+})
 
 // Create port
 const port = process.env.PORT || 4000;
@@ -65,4 +65,4 @@ app.use( (err: any, req: any, res: any, next: any) => {
   res.status(err.statusCode).send(err.message);
 });
 
-//LoadBalancerRegistration()
+LoadBalancerRegistration()
