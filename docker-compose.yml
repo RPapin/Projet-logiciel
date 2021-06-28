@@ -5,8 +5,6 @@ services:
     container_name: mongodbelective
     image: mongo
     restart: always
-    build: 
-      context: ./MongoDb
     volumes:
       - mongodata:/data/db
       - ./MongoDb/scripts:/docker-entrypoint-initdb.d
