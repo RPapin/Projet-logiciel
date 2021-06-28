@@ -28,6 +28,7 @@
 <script lang="ts">
     import Vue from 'vue';
     import ApiService from "../../services/apiService"
+    import { mapMutations  } from 'vuex'
     export default Vue.extend({
         data() {
             return {
@@ -39,6 +40,10 @@
             }
         },
         methods: {
+            ...mapMutations([
+                'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+                'updateUserInfo'
+            ]),
            async handleSubmitForm() {
                 let apiService = new ApiService()
                 let apiURL = 'login-user';
@@ -48,7 +53,9 @@
                     this.error = res.error
                 } else {
                     //save user info
+                    this.toggle(true)
                     localStorage.setItem('AUTH_TOKEN', res.token)
+                    this.updateUserInfo(res)
                     this.$router.push('/')
                 }
                 
@@ -56,16 +63,7 @@
             }
         },
         created() {
-            // let apiURL = 'http://localhost:4000/login';
-                
-            //     axios.get(apiURL, {
-            //         headers: {'Access-Control-Allow-Origin': '*'},
-                    
-            //     }).then(() => {
-            //     //   this.$router.push('/view')
-            //     }).catch(error => {
-            //         console.log(error)
-            //     })
+
         }
     })
 </script>

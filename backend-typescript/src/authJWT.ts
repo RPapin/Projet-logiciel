@@ -13,32 +13,31 @@ export function authenticateToken(req: any, res: any, next: any): void {
     const authHeader = req.headers.authorization
     const token = authHeader && authHeader.split(' ')[1]
 
-    if (token == null) return res.sendStatus(401)
+    if (token == null) return res.json({error : 'No token provided'})
 
     jwt.verify(token, process.env.TOKEN_SECRET as string, async (err: any, user: any) => {
       if (err){
+        console.log(err)
         err = err.toString()
         // if token expired
         if(err.includes("expired")){
           await redisClient.get(token, async (err, reply) => {
             let refreshToken = reply
-            console.log('isRefreshToken ' + refreshToken)
             // if a refresh token exist
             if(refreshToken !== null){
               await redisClient.del(token)
               req.refreshToken = refreshToken
               req.user = user
+              console.log("refreshToken is now on use")
               next()
-            } else return res.sendStatus(403)
+            } else return res.json({error : 'Refresh Token expired'})
           })
         } else {
-          return res.sendStatus(403)
+          return res.json({error : 'Bad token provided'})
         }
       } else {
         req.user = user
         next()
       }
-
-
     })
   }
