@@ -36,13 +36,12 @@
                 Articles: []
             }
         },
-        created() {
+        async beforeCreate() {
             const service = new ApiService()
             //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
             let apiURL:string = 'get-all-article';
             let authToken:string = localStorage.getItem('AUTH_TOKEN') === null ? "" : localStorage.getItem('AUTH_TOKEN')
-            
-            let data:any = service.getCall(apiURL, authToken);
+            let data:any = await service.getCall(apiURL, authToken);
             this.Articles = data.articles
         },
         methods: {

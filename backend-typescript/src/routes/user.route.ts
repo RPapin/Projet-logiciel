@@ -5,7 +5,9 @@ import path from 'path';
 import {generateAccessToken} from '../authJWT';
 import redis from 'redis'
 import { redisClient } from '../redis.config';
-
+import {authenticateToken} from '../authJWT'
+import jwt from 'jsonwebtoken'
+import fs from 'fs'
 const userRoute = express.Router();
 const Request = tedious.Request;
 const TYPES = tedious.TYPES;
@@ -15,24 +17,16 @@ interface RowResult {
 
 userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     const request = new Request("SELECT r.role_name FROM Account as a LEFT JOIN Role as r ON a.role_id = r.role_id WHERE a.account_id = "+req.params.id+" ;", (err) => {
-    if (err) {
-        console.log(err);}
+        if (err) {
+            console.log(err);
+        }
     });
     let result = "";
     request.on('row', (columns) => {
         columns.forEach((column) => {
-            if (column.value === null) {
-            console.log('NULL');
-            } else {
             result+= column.value;
-            }
         });
     });
-
-    request.on('done', (rowCount, more) => {
-    console.log(rowCount + ' rows returned');
-    });
-
     // Close the connection after the final event emitted by the request, after the callback passes
     request.on("requestCompleted",  () => {
         // return the sql result
@@ -54,8 +48,6 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
                 console.log(err)
                 return res.status(500).send({ msg: "Error occured" });
             }
-            // returing the response with file path and name
-            return res.send({name: myFile.name, path: `/${myFile.name}`});
         });
     }
     const body = JSON.parse(req.body.data)
@@ -63,7 +55,8 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     // Generate JWT token
     const listToken: string[] = generateAccessToken(body);
     // INSERT IN THE DATABASE
-    const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}', null, null)`// '${token}'
+    const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}');`
+    console.log(sql)
     const request = new Request(sql, (err) => {
         if (err) {
             console.log(err);
@@ -109,9 +102,99 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
         columns.forEach((column) => {
             result[column.metadata.colName] = column.value
         });
-        console.log(result)
     });
     sqlConnector.execSql(request);
  });
-
+userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
+    //FETCH AND SEND USER INFO
+    const authHeader = req.headers.authorization
+    const token = authHeader && authHeader.split(' ')[1]
+    const decodedToken = jwt.decode(token, {
+        complete: true
+       });
+    console.log(decodedToken)
+    const sql = `SELECT * FROM Account WHERE email = '${decodedToken.payload.email}' AND password='${decodedToken.payload.password}';`;
+    let result:any = {};
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+        } else {
+            //User info has been found
+            if(rowCount === 1){
+                result["isLoggedIn"] = true
+                result["refreshToken"] = req.refreshToken
+                res.json(result)
+            }
+        }
+    });
+    request.on('row', (columns) => {
+        columns.forEach((column) => {
+            result[column.metadata.colName] = column.value
+        });
+    });
+    sqlConnector.execSql(request);
+})
+userRoute.route('/edit-user').get(authenticateToken, (req: any, res, next) => {
+    const body = req.body 
+    let profilePictureName = 'default-profile-picture.png'
+    if (req.files) {
+        const myFile = req.files.file;
+        const extension = path.extname(myFile.name)
+        profilePictureName = 'profile-picture-' + Date.now() + extension
+        //  mv() method places the file inside public directory
+        myFile.mv(`./public/${profilePictureName}`, (err: any) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).send({ msg: "Error occured" });
+            }
+        });
+    }
+    const sql = `UPDATE Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}') WHERE email = '${body.email}' AND password='${body.password}';`
+    console.log(sql)
+    let result:any = {};
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+        } else {
+            //User info has been found
+            if(rowCount === 1){
+                result["refreshToken"] = req.refreshToken
+                res.json(result)
+            }
+        }
+    });
+    request.on('row', (columns) => {
+        columns.forEach((column) => {
+            result[column.metadata.colName] = column.value
+        });
+    });
+    sqlConnector.execSql(request);
+})
+userRoute.route('/delete-user').post(authenticateToken, (req: any, res, next) => {
+    const body = req.body 
+    
+    let profilePictureName = 'default-profile-picture.png'
+    console.log('./public/' + body.picture_profil)
+    if (body.picture_profil !== profilePictureName && fs.lstatSync('./public/' + body.picture_profil).isFile()) {
+        try {
+            fs.unlinkSync(`./public/${body.picture_profil}`)
+            //file removed
+          } catch(err) {
+            console.error(err)
+          }
+    }
+    const sql = `DELETE FROM Account WHERE account_id = ${body.account_id};`
+    console.log(sql)
+    let result:any = {};
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send({ message: "Error occured" });
+        } else {
+            //User delete has been succeded
+            res.json({message : 'user has been deleted'})
+        }
+    });
+    sqlConnector.execSql(request);
+})
 export default userRoute

@@ -75,9 +75,10 @@
                         'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                     }
                 }).then((res) => {
-                    console.log(res.data)
+                    this.toggle(true)
                     localStorage.setItem('AUTH_TOKEN', res.data.token)
-                    this.$router.push('/viewArticle')
+                    this.updateUserInfo(res)
+                    this.$router.push('/')
                 }).catch(error => {
                     console.log(error)
                 });

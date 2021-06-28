@@ -7,6 +7,7 @@ import ListArticle from '@/components/Article/ListArticle.vue'
 import Home from '@/components/home.vue'
 import Login from '@/components/User/Login.vue'
 import SignIn from '@/components/User/SignIn.vue'
+import EditProfile from '@/components/User/EditProfile.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -46,7 +47,13 @@ const routes = [
     path: '/sign-up',
     name: 'sign-up',
     component: SignIn
-  }
+  },
+  {
+    path: '/edit-profile',
+    name: 'edit-profile',
+    component: EditProfile
+  },
+  
 ]
 
 const router = new VueRouter({
