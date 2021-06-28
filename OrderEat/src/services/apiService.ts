@@ -8,7 +8,7 @@ export default class apiService extends Vue{
         super();
     }
     getCall(url:string, token:string = "", checkAuth:boolean=false):any {
-        const apiURL = this.baseUrl + url 
+        const apiURL = this.baseUrl + url
         let headers = {}
         if(token !== "")headers = {
             headers : {
@@ -16,7 +16,7 @@ export default class apiService extends Vue{
             }
         }
         const data = axios.get(apiURL, headers).then(res => {
-            //Token is invalid
+            // Token is invalid
             if(res.data.error!== undefined && !checkAuth){
                 localStorage.setItem('AUTH_TOKEN', undefined)
                 router.push('/login')
@@ -32,7 +32,7 @@ export default class apiService extends Vue{
         return data
     }
     postCall(url:string, postData:any, token:string = ""):any {
-        const apiURL = this.baseUrl + url 
+        const apiURL = this.baseUrl + url
         let headers = {}
         if(token !== "")headers = {
             headers : {
@@ -40,7 +40,7 @@ export default class apiService extends Vue{
             }
         }
         const data = axios.post(apiURL, postData, headers).then(res => {
-            //Token is invalid
+            // Token is invalid
             if(res.data.error!== undefined){
                 localStorage.setItem('AUTH_TOKEN', undefined)
                 router.push('/login')
