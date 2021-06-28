@@ -38,7 +38,7 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     sqlConnector.execSql(request);
  })
  userRoute.route('/create-user').post((req: any, res, next) => {
-
+    //We need 3 nested sql request so we are using callbacks
     let profilePictureName = 'default-profile-picture.png'
     if (req.files) {
         const myFile = req.files.file;
@@ -52,29 +52,73 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
             }
         });
     }
+    //DEFINE A SPONSORSHIP CODE
+    const sponsorship = Date.now()
     const body = JSON.parse(req.body.data)
-    body.sponsorship = body.sponsorship === "" ? null : '"' + body.sponsorship + '"'
     // Generate JWT token
     const listToken: string[] = generateAccessToken(body);
-    // INSERT IN THE DATABASE
-    const sql = `INSERT INTO Account VALUES ( ${body.role_id}, ${body.phone_number}, '${body.password}', '${body.first_name}', '${body.last_name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}');`
-    console.log(sql)
-    const request = new Request(sql, (err) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send({ msg: "Error occured : " + err });
-        } else {
-            console.log('New user has been inserted')
-            redisClient.set(listToken[0], listToken[1], redis.print);
-            res.json({
-                token : listToken[0]
-            })
+    //SEARCH A SPONSOR
+    let sponsorshipCredit = 0
+    let theSponsorCredit = 0
+    let theSponsorId 
+    console.log(body)
+    if(body.sponsorship_on_sign_up !== ''){
+        let result:any = {}
+        const sqlSelect = `SELECT * FROM Account WHERE sponsorship = ${body.sponsorship_on_sign_up};`
+        const request = new Request(sqlSelect, (err, rowCount) => {
+            if (err) {
+                res.status(500).send({ msg: "Error occured : " + err });
+            } else {
+                if(rowCount > 0){
+                    sponsorshipCredit = 10
+                    theSponsorCredit = result['sponsorship_credit'] + 10
+                    theSponsorId = result['account_id'] 
+                    const sqlUp = `UPDATE Account SET sponsorship_credit = ${theSponsorCredit} WHERE account_id = ${theSponsorId};`
+                    const requestUp = new Request(sqlUp, (err, rowCount) => {
+                        if (err) {
+                            res.status(500).send({ msg: "Error occured : " + err });
+                        } else {
+                            insertNewUser(body, sponsorship, profilePictureName, sponsorshipCredit)
+                        }
+                    })
+                    sqlConnector.execSql(requestUp);
+                }
+            }
+        });
+        request.on('row', (columns) => {
+            columns.forEach((column) => {
+                result[column.metadata.colName] = column.value
+            });
+        });
+        sqlConnector.execSql(request);
+        //WE FOUND A SPONSOR
+        if(sponsorshipCredit !== 0){
+            let result:any = {}
+ 
         }
-    });
-    sqlConnector.execSql(request);
-
+    }
+    
+    // INSERT IN THE DATABASE
+    const insertNewUser = (body: { role_id: any; phone_number: any; password: any; first_name: any; last_name: any; email: any; }, sponsorship: any, profilePictureName: any, sponsorshipCredit: any) => {
+        const sql = `INSERT INTO Account VALUES ( ${body.role_id}, ${body.phone_number}, '${body.password}', '${body.first_name}', '${body.last_name}', ${sponsorship}, '${profilePictureName}', '${body.email}',  ${sponsorshipCredit});`
+        console.log(sql)
+        const request = new Request(sql, (err) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ msg: "Error occured : " + err });
+            } else {
+                console.log('New user has been inserted')
+                redisClient.set(listToken[0], listToken[1], redis.print);
+                res.json({
+                    token : listToken[0]
+                })
+            }
+        });
+        sqlConnector.execSql(request);
+    }
  });
  userRoute.route('/login-user').post((req: any, res, next) => {
+     console.log('call to login')
     const body = req.body
     const sql = `SELECT * FROM Account WHERE email = '${body.email}' AND password='${body.password}';`;
     let result:any = {};
@@ -156,7 +200,7 @@ userRoute.route('/edit-user').post(authenticateToken, (req: any, res, next) => {
             }
         });
     }
-    const sql = `UPDATE Account SET phone_number = ${body.phone_number}, password = '${body.password}', first_name = '${body.first_name}', last_name = '${body.last_name}', sponsorship = ${body.sponsorship}, picture_profil = '${body.picture_profil}', email = '${body.email}' WHERE account_id = '${body.account_id}';`
+    const sql = `UPDATE Account SET phone_number = ${body.phone_number}, password = '${body.password}', first_name = '${body.first_name}', last_name = '${body.last_name}', picture_profil = '${body.picture_profil}', email = '${body.email}' WHERE account_id = '${body.account_id}';`
     let result:any = {};
     const request = new Request(sql, (err, rowCount) => {
         if (err) {

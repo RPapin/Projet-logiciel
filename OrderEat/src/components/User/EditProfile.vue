@@ -28,8 +28,8 @@
                     <input type="text" class="form-control" v-model="user.phone_number" required>
                 </div>
                 <div class="form-group">
-                    <label>Code de parainage</label>
-                    <input type="text" class="form-control" v-model="user.sponsorship">
+                    <label>Crédit de parainage</label>
+                    <input type="text" class="form-control" v-model="user.sponsorship_credit" disabled>
                 </div>
 
                 <div class="form-group">
@@ -55,7 +55,7 @@
                     first_name : "",
                     password : "",
                     phone_number : null,
-                    sponsorship : "",
+                    sponsorship_credit : "",
                     email : "",
                     picture_profil :""
                 }
@@ -93,7 +93,7 @@
             ]),
         async created() {
             await setTimeout(() => { 
-                console.log(this.userInfo )
+                console.log(this.userInfo)
                 this.user = this.userInfo 
             }, 1000)}
         })

@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <label>Code de parainage</label>
-                    <input type="text" class="form-control" v-model="user.sponsorship">
+                    <input type="text" class="form-control" v-model="user.sponsorship_on_sign_up">
                 </div>
                 <div class="form-group">
                     <label>Photo de profile</label>
@@ -62,7 +62,7 @@
                    email: '',
                    password: '',
                    phone_number: '',
-                   sponsorship: '',
+                   sponsorship_on_sign_up: '',
                    role_id:null
                 },
                 picture_profil: '',
@@ -87,7 +87,7 @@
                 }).then((res) => {
                     this.toggle(true)
                     localStorage.setItem('AUTH_TOKEN', res.data.token)
-                    this.updateUserInfo(this.user)
+                    //this.updateUserInfo(this.user)
                     this.$router.push('/')
                 }).catch(error => {
                     console.log(error)

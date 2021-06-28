@@ -1,5 +1,6 @@
 const express = require('express');
 const axios = require('axios');
+const cors  = require('cors')
 const port = 3000
 const servers = [];
 
@@ -22,6 +23,7 @@ const register = (req, res) => {
 }
 
 const server = express().use(express.json()).get(/^\/api\/.+$/, handler).post(/^\/api\/.+$/, handler).post('/register', register);
+server.use(cors());
 server.listen(port)
 
 setInterval(async () => {
