@@ -1,28 +1,20 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="order in Orders" :key="order._id">
-                        <td>{{ order.name }}</td>
-                        <td>{{ order.email }}</td>
-                        <td>{{ order.phone }}</td>
-                        <td>
-                            <router-link :to="{name: 'edit', params: { id: order._id }}" class="btn btn-success">Edit
-                            </router-link>
-                            <button @click.prevent="deleteOrder(order._id)" class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-md-6 border border-primary" v-for="menu in Menus" :key="menu._id">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img :src="menu.picture" :alt="'Miniature de '+menu.name" class="img-thumbnail">
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{ menu.name }}</h3>
+                        <p>{{ menu.description }} - {{ menu.estimation_time }} min</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p>{{ menu.price }} €</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>

@@ -5,7 +5,8 @@ const servers = [];
 
 const handler = async (req, res) => {
     try {
-        const targetServer = servers.map(v => v).sort((a, b) => b.health - a.health)[0]
+        // Higher health mean lowest performance
+        const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
         console.log(`[TARGET] ${targetServer.serviceName}`)
         const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
         res.json(resp.data)
@@ -26,9 +27,13 @@ server.listen(port)
 setInterval(async () => {
     try{
         servers.forEach( (service, index) => {
+            sendTimestamp=Date.now()
             axios.get(service.healthPoint, {proxy: { host: service.serviceName, port: service.servicePort}}).then(({data}) => {
-                servers[index].health = data.health
+                receptionTimestamp=Date.now()
+                servers[index].health = data.health+(receptionTimestamp-sendTimestamp)
                 console.log(`${service.serviceName}: ${data.health} health`)
+            }).catch(error => {
+                servers.remove(index)
             })
         })
     } catch(e) {

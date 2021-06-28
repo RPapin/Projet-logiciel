@@ -4,17 +4,16 @@
             <table class="table table-striped">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Temps de préparation estimé</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="article in Articles" :key="article._id">
                         <td>{{ article.name }}</td>
-                        <td>{{ article.email }}</td>
-                        <td>{{ article.phone }}</td>
+                        <td>{{ article.price }} €</td>
+                        <td>{{ article.estimation_time }} min</td>
                         <td>
                             <router-link :to="{name: 'edit', params: { id: article._id }}" class="btn btn-success">Edit
                             </router-link>

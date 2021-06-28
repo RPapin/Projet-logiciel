@@ -28,3 +28,11 @@ simple-build:
 sbuild: simple-build
 
 start: up
+
+mdbshell:
+	docker exec -it mongodbelective bash
+
+removevolumes:
+	docker volume rm projet-logiciel_mongodata
+
+rmv: removevolumes

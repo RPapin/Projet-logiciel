@@ -9,7 +9,7 @@ const HEALTH_PATH = environment.healthPath
 // Load balancer registration
 
 export function healthCompute(){
-  return os.freemem()/os.totalmem()
+  return os.totalmem()-os.freemem()
 }
 
 export function LoadBalancerRegistration (){
