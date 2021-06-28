@@ -68,4 +68,4 @@ app.use( (err: any, req: any, res: any, next: any) => {
   res.status(err.statusCode).send(err.message);
 });
 
-LoadBalancerRegistration()
+//LoadBalancerRegistration()

@@ -26,9 +26,4 @@ roleRoute.route('/get-roles').get((req: any, res, next) => {
     });
     sqlConnector.execSql(request);
  })
-
-
-
- 
-
 export default roleRoute
