@@ -33,7 +33,11 @@ setInterval(async () => {
                 servers[index].health = data.health+(receptionTimestamp-sendTimestamp)
                 console.log(`${service.serviceName}: ${data.health} health`)
             }).catch(error => {
-                servers.remove(index)
+                if(servers.length > 0 && typeof servers[index] === 'undefined')
+                {
+                    console.log(`Remove server : ${servers[index].serviceName}:${servers[index].servicePort}`)
+                    servers.remove(index)
+                }
             })
         })
     } catch(e) {

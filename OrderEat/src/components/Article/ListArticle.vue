@@ -7,6 +7,7 @@
                         <th>Nom</th>
                         <th>Prix</th>
                         <th>Temps de préparation estimé</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
