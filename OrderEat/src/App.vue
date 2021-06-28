@@ -40,7 +40,6 @@
 
   export default Vue.extend({
        async created() {
-        
         //CHECK IF TOKEN IS VALID
         let auth_token = localStorage.getItem('AUTH_TOKEN')
         
@@ -49,9 +48,7 @@
           let apiURL = 'check-user';
           console.log('app created')
           let res = await apiService.getCall(apiURL, auth_token, true)
-          console.log(res.isLoggedIn)
           if(res.isLoggedIn && !this.isLoggedIn){
-            console.log(res)
             this.updateUserInfo(res)
             this.toggle(true)
           } else if(this.isLoggedIn)this.toggle(false)

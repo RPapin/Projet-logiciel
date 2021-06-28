@@ -9,6 +9,7 @@ import bodyParser from  'body-parser'
 import orderAPI from './routes/order.route'
 import articleAPI from './routes/article.route'
 import userAPI from './routes/user.route'
+import roleAPI from './routes/roles.route'
 import createError from 'http-errors'
 
 
@@ -41,6 +42,8 @@ app.use(fileUpload());
 app.use('/api', orderAPI)
 app.use('/api', articleAPI)
 app.use('/api', userAPI)
+app.use('/api', roleAPI)
+
 
 // // Health route for load balancing
 // app.get(HEALTH_PATH, (req, res) => {

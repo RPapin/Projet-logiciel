@@ -1,7 +1,9 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <img class="img-rounded img-responsive" alt="Photo de profile" :src="this.user.picture_profil"/>
+            <img v-if="this.user.picture_profil === 'default-profile-picture.png'" class="img-rounded img-responsive imgProfile" alt="Photo de profile"  src="@/assets/default/default-profile-picture.png"/>
+            <img v-else class="img-rounded img-responsive imgProfile" alt="Photo de profile"  :src="'data:image/png;base64,' + this.user.picture_profil"/>
+            
         </div>
         <div class="col-md-4">
             <h3 class="text-center">Creer un compte</h3>
@@ -25,14 +27,13 @@
                     <label>Phone</label>
                     <input type="text" class="form-control" v-model="user.phone_number" required>
                 </div>
-
                 <div class="form-group">
                     <label>Code de parainage</label>
-                    <input type="text" class="form-control" v-model="user.sponsorship" required>
+                    <input type="text" class="form-control" v-model="user.sponsorship">
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block">Creer</button>
+                    <button class="btn btn-primary btn-block">Modifier</button>
                 </div>
             </form>
             <div class="form-group">
@@ -49,7 +50,15 @@
     export default Vue.extend({
         data() {
             return {
-                user: {}
+                user: {
+                    last_name : "",
+                    first_name : "",
+                    password : "",
+                    phone_number : null,
+                    sponsorship : "",
+                    email : "",
+                    picture_profil :""
+                }
             }
         },
         methods: {
@@ -58,8 +67,8 @@
                 const service = new ApiService()
                 let apiURL = 'edit-user';
                 let authToken = localStorage.getItem('AUTH_TOKEN')
-                let res = await service.postCall(apiURL, this.user, authToken);
-                console.log('after edit res ' + res)
+                await service.postCall(apiURL, this.user, authToken);
+                this.$router.push('/')
             },
             async deleteAccount(){
                 const service = new ApiService()
@@ -82,12 +91,15 @@
             'isLoggedIn',
             'userInfo'
             ]),
-        created() {
-            setTimeout(() => {
-                this.user = this.userInfo
-                console.log(this.user)
-                console.log(this.user.picture_profil)
-            }, 500)
-        }
+        async created() {
+            await setTimeout(() => { 
+                console.log(this.userInfo )
+                this.user = this.userInfo 
+            }, 1000)}
         })
 </script>
+<style >
+.imgProfile {
+  width: 300px;
+}
+</style>

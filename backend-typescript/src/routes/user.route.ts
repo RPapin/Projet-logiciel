@@ -8,6 +8,8 @@ import { redisClient } from '../redis.config';
 import {authenticateToken} from '../authJWT'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
+import { Buffer } from 'buffer';
+
 const userRoute = express.Router();
 const Request = tedious.Request;
 const TYPES = tedious.TYPES;
@@ -55,7 +57,7 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     // Generate JWT token
     const listToken: string[] = generateAccessToken(body);
     // INSERT IN THE DATABASE
-    const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}');`
+    const sql = `INSERT INTO Account VALUES ( ${body.role_id}, ${body.phone_number}, '${body.password}', '${body.first_name}', '${body.last_name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}');`
     console.log(sql)
     const request = new Request(sql, (err) => {
         if (err) {
@@ -112,7 +114,6 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
     const decodedToken = jwt.decode(token, {
         complete: true
        });
-    console.log(decodedToken)
     const sql = `SELECT * FROM Account WHERE email = '${decodedToken.payload.email}' AND password='${decodedToken.payload.password}';`;
     let result:any = {};
     const request = new Request(sql, (err, rowCount) => {
@@ -121,6 +122,12 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
         } else {
             //User info has been found
             if(rowCount === 1){
+                console.log(result)
+                if(result["picture_profil"] !== "default-profile-picture.png"){
+                    const bitmap = fs.readFileSync(`./public/${result["picture_profil"]}`);
+                    const base64 = Buffer.from(bitmap).toString("base64");
+                    result["picture_profil"] = base64
+                }
                 result["isLoggedIn"] = true
                 result["refreshToken"] = req.refreshToken
                 res.json(result)
@@ -134,7 +141,7 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
     });
     sqlConnector.execSql(request);
 })
-userRoute.route('/edit-user').get(authenticateToken, (req: any, res, next) => {
+userRoute.route('/edit-user').post(authenticateToken, (req: any, res, next) => {
     const body = req.body 
     let profilePictureName = 'default-profile-picture.png'
     if (req.files) {
@@ -149,8 +156,7 @@ userRoute.route('/edit-user').get(authenticateToken, (req: any, res, next) => {
             }
         });
     }
-    const sql = `UPDATE Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}') WHERE email = '${body.email}' AND password='${body.password}';`
-    console.log(sql)
+    const sql = `UPDATE Account SET phone_number = ${body.phone_number}, password = '${body.password}', first_name = '${body.first_name}', last_name = '${body.last_name}', sponsorship = ${body.sponsorship}, picture_profil = '${body.picture_profil}', email = '${body.email}' WHERE account_id = '${body.account_id}';`
     let result:any = {};
     const request = new Request(sql, (err, rowCount) => {
         if (err) {

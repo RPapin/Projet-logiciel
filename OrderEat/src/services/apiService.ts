@@ -7,13 +7,15 @@ export default class apiService extends Vue{
     constructor() {
         super();
     }
-    getCall(url:string, token:string, checkAuth:boolean=false):any {
+    getCall(url:string, token:string = "", checkAuth:boolean=false):any {
         const apiURL = this.baseUrl + url 
-        const data = axios.get(apiURL, {
+        let headers = {}
+        if(token !== "")headers = {
             headers : {
                 Authorization: "Bearer " + token
             }
-        }).then(res => {
+        }
+        const data = axios.get(apiURL, headers).then(res => {
             //Token is invalid
             if(res.data.error!== undefined && !checkAuth){
                 localStorage.setItem('AUTH_TOKEN', undefined)

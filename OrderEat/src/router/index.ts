@@ -6,7 +6,7 @@ import EditArticle from '@/components/Article/EditArticle.vue'
 import ListArticle from '@/components/Article/ListArticle.vue'
 import Home from '@/components/home.vue'
 import Login from '@/components/User/Login.vue'
-import SignIn from '@/components/User/SignIn.vue'
+import SignUp from '@/components/User/SignUp.vue'
 import EditProfile from '@/components/User/EditProfile.vue'
 // import { Route } from '../interface'
 
@@ -46,7 +46,7 @@ const routes = [
   {
     path: '/sign-up',
     name: 'sign-up',
-    component: SignIn
+    component: SignUp
   },
   {
     path: '/edit-profile',
