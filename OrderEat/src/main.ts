@@ -21,6 +21,14 @@ const store = new Vuex.Store({
     updateUserInfo (state, newUserInfo) {
       state.userInfo = newUserInfo
     }
+  },
+  actions : {
+    logout ({commit}) {
+      localStorage.setItem('AUTH_TOKEN', undefined)
+      commit('updateUserInfo', {})
+      commit('toggle', false)
+      router.push('/')
+    }
   }
 })
 new Vue({

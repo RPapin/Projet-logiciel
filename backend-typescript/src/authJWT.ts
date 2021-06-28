@@ -17,7 +17,6 @@ export function authenticateToken(req: any, res: any, next: any): void {
 
     jwt.verify(token, process.env.TOKEN_SECRET as string, async (err: any, user: any) => {
       if (err){
-        console.log(err)
         err = err.toString()
         // if token expired
         if(err.includes("expired")){

@@ -7,7 +7,7 @@ import redis from 'redis'
 import { redisClient } from '../redis.config';
 import {authenticateToken} from '../authJWT'
 import jwt from 'jsonwebtoken'
-
+import fs from 'fs'
 const userRoute = express.Router();
 const Request = tedious.Request;
 const TYPES = tedious.TYPES;
@@ -56,6 +56,7 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     const listToken: string[] = generateAccessToken(body);
     // INSERT IN THE DATABASE
     const sql = `INSERT INTO Account VALUES ( null, ${body.phone}, '${body.password}', '${body.firstName}', '${body.name}', ${body.sponsorship}, '${profilePictureName}', '${body.email}');`
+    console.log(sql)
     const request = new Request(sql, (err) => {
         if (err) {
             console.log(err);
@@ -166,6 +167,33 @@ userRoute.route('/edit-user').get(authenticateToken, (req: any, res, next) => {
         columns.forEach((column) => {
             result[column.metadata.colName] = column.value
         });
+    });
+    sqlConnector.execSql(request);
+})
+userRoute.route('/delete-user').post(authenticateToken, (req: any, res, next) => {
+    const body = req.body 
+    
+    let profilePictureName = 'default-profile-picture.png'
+    console.log('./public/' + body.picture_profil)
+    if (body.picture_profil !== profilePictureName && fs.lstatSync('./public/' + body.picture_profil).isFile()) {
+        try {
+            fs.unlinkSync(`./public/${body.picture_profil}`)
+            //file removed
+          } catch(err) {
+            console.error(err)
+          }
+    }
+    const sql = `DELETE FROM Account WHERE account_id = ${body.account_id};`
+    console.log(sql)
+    let result:any = {};
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send({ message: "Error occured" });
+        } else {
+            //User delete has been succeded
+            res.json({message : 'user has been deleted'})
+        }
     });
     sqlConnector.execSql(request);
 })

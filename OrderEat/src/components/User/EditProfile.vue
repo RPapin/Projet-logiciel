@@ -8,9 +8,9 @@
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Nom</label>
-                    <input type="text" class="form-control" v-model="user.name" required>
+                    <input type="text" class="form-control" v-model="user.last_name" required>
                     <label>Prénom</label>
-                    <input type="text" class="form-control" v-model="user.firstName" required>
+                    <input type="text" class="form-control" v-model="user.first_name" required>
                 </div>
 
                 <div class="form-group">
@@ -23,30 +23,28 @@
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
-                    <input type="text" class="form-control" v-model="user.phone" required>
+                    <input type="text" class="form-control" v-model="user.phone_number" required>
                 </div>
 
                 <div class="form-group">
                     <label>Code de parainage</label>
                     <input type="text" class="form-control" v-model="user.sponsorship" required>
                 </div>
-                <div class="form-group">
-                    <label>Photo de profile</label>
-                    <input type="input" class="form-control" v-model="user.profilePicture" required>
-                </div>
-
 
                 <div class="form-group">
-                    <button class="btn btn-danger btn-block">Creer</button>
+                    <button class="btn btn-primary btn-block">Creer</button>
                 </div>
             </form>
+            <div class="form-group">
+                <button class="btn btn-danger btn-block" v-on:click="deleteAccount">Supprimer mon compte</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
-    import { mapMutations, mapState  } from 'vuex'
+    import { mapMutations, mapState, mapActions } from 'vuex'
     import ApiService from "../../services/apiService"
     export default Vue.extend({
         data() {
@@ -63,21 +61,33 @@
                 let res = await service.postCall(apiURL, this.user, authToken);
                 console.log('after edit res ' + res)
             },
-        ...mapMutations([
-          'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
-          'updateUserInfo'
+            async deleteAccount(){
+                const service = new ApiService()
+                let apiURL = 'delete-user';
+                let authToken = localStorage.getItem('AUTH_TOKEN')
+                let res = await service.postCall(apiURL, this.user, authToken);
+                this.logout()
+                console.log(res.message)
+            },
+            ...mapMutations([
+            'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+            'updateUserInfo'
             ]),
-        },
-        mounted() {
-            console.log('edit mounted')
-            this.user = this.userInfo
-            console.log(this.user)
-            console.log(this.user.picture_profil)
+            ...mapActions([
+                'logout',
+            ])
         },
         computed: mapState([
             // map this.count to store.state.count
             'isLoggedIn',
             'userInfo'
             ]),
+        created() {
+            setTimeout(() => {
+                this.user = this.userInfo
+                console.log(this.user)
+                console.log(this.user.picture_profil)
+            }, 500)
+        }
         })
 </script>

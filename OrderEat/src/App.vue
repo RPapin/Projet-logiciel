@@ -18,7 +18,7 @@
             <router-link class="nav-link pr-3" to="edit-profile">Editer mon profile</router-link>
           </li>
           <li v-if="this.isLoggedIn" class="nav-item">
-            <a class="nav-link" v-on:click="logout">Se déconnecter</a>
+            <a class="nav-link" v-on:click="this.logout">Se déconnecter</a>
           </li>
           <li v-if="!this.isLoggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Se connecter</router-link>
@@ -36,7 +36,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import ApiService from "./services/apiService"
-  import { mapMutations, mapState  } from 'vuex'
+  import { mapMutations, mapState, mapActions  } from 'vuex'
 
   export default Vue.extend({
        async created() {
@@ -68,11 +68,9 @@
           'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
           'updateUserInfo'
         ]),
-        logout () {
-          localStorage.setItem('AUTH_TOKEN', undefined)
-          this.updateUserInfo({})
-          this.toggle(false)
-        }
+        ...mapActions([
+          'logout',
+        ])
     }
   })  
 </script>

@@ -58,7 +58,6 @@
                     this.updateUserInfo(res)
                     this.$router.push('/')
                 }
-                
                 //
             }
         },
