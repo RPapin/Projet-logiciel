@@ -34,6 +34,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "food",
   "name" : "Pizza Reine",
+  "description" : "Une pizza delicieuse",
   "price" : "10,00€",
   "estimation_time" : "40",
   "picture" : ""
@@ -44,6 +45,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "food",
   "name" : "Pizza Carnivore",
+  "description" : "Une pizza delicieuse",
   "price" : "10,00€",
   "estimation_time" : "40",
   "picture" : ""
@@ -54,6 +56,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "food",
   "name" : "Pizza Hawaïenne",
+  "description" : "Une pizza delicieuse",
   "price" : "10,00€",
   "estimation_time" : "40",
   "picture" : ""
@@ -64,6 +67,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "food",
   "name" : "Pizza Norvegienne",
+  "description" : "Une pizza delicieuse",
   "price" : "10,00€",
   "estimation_time" : "40",
   "picture" : ""
@@ -74,6 +78,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "drink",
   "name" : "Coca-Cola",
+  "description" : "Une boisson delicieuse",
   "price" : "2,00€",
   "estimation_time" : "0",
   "picture" : ""
@@ -84,6 +89,7 @@ db.product.insert({
   "restaurant_id" : 0,
   "type" : "sauce",
   "name" : "Sauce piquante",
+  "description" : "Une sauce delicieuse",
   "price" : "0,00€",
   "estimation_time" : "0",
   "picture" : ""
@@ -93,6 +99,7 @@ db.menu.insert({
   "_id": 0,
   "restaurant_id" : 0,
   "name" : "Menu Pizza Reine",
+  "description" : "Un menu delicieux",
   "price" : "11,50€",
   "estimation_time" : "40",
   "picture" : "",

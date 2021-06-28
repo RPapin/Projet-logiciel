@@ -63,6 +63,9 @@ db.createCollection( "product",
            name : {
              bsonType : ["string"]
            },
+           description : {
+             bsonType : ["string"]
+           },
            price : {
              bsonType : "float"
            },
@@ -95,6 +98,9 @@ db.createCollection( "menu",
              bsonType : ["objectId"]
            },
            name : {
+             bsonType : ["string"]
+           },
+           description : {
              bsonType : ["string"]
            },
            price : {
