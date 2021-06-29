@@ -40,7 +40,7 @@
 
   export default Vue.extend({
        async created() {
-        //CHECK IF TOKEN IS VALID
+        // CHECK IF TOKEN IS VALID
         let auth_token = localStorage.getItem('AUTH_TOKEN')
         
         if(auth_token !== undefined){
