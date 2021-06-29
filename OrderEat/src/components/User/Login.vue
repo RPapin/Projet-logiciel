@@ -49,7 +49,11 @@
                 let apiURL = 'login-user';
                 let res = await apiService.postCall(apiURL, JSON.parse(JSON.stringify(this.user)))
                 console.log(res)
-                if('error' in res){
+                if(res !== undefined)
+                {
+                    this.error = "response is undefined"
+                }
+                else if('error' in res){
                     this.error = res.error
                 } else {
                     //save user info

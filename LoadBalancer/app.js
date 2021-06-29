@@ -34,7 +34,9 @@ const register = (req, res) => {
     res.end()
 }
 
-const server = express().use(cors()).use(express.json()).get(/^\/api\/.+$/, handlerGET).post(/^\/api\/.+$/, handlerPOST).post('/register', register);
+const server = express()
+server.use(cors())
+server.use(express.json()).get(/^\/api\/.+$/, handlerGET).post(/^\/api\/.+$/, handlerPOST).post('/register', register);
 server.listen(port)
 
 setInterval(async () => {
