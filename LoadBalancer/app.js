@@ -9,7 +9,7 @@ const handlerGET = async (req, res) => {
         // Higher health mean lowest performance
         const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
         console.log(`[TARGET] ${targetServer.serviceName}`)
-        const resp = await axios.get(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
+        const resp = await axios.get(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body)
         res.json(resp.data)
     } catch (e){
         console.log(e)
@@ -21,7 +21,7 @@ const handlerPOST = async (req, res) => {
         // Higher health mean lowest performance
         const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
         console.log(`[TARGET] ${targetServer.serviceName}`)
-        const resp = await axios.post(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
+        const resp = await axios.post(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body)
         res.json(resp.data)
     } catch (e){
         console.log(e)
