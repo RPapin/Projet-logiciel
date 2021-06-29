@@ -2,15 +2,21 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  name: {
+  restaurant_id: {
     type: String
   },
-  email: {
+  client_id: {
     type: String
   },
-  phone: {
+  order_item: {
+    type: [{item_id:String, quantity:Number}]
+  },
+  state : {
+    type: String
+  },
+  estimation_time: {
     type: Number
-  },
+  }
 }, {
   collection: 'order'
 })

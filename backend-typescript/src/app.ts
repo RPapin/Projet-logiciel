@@ -13,6 +13,7 @@ import roleAPI from './routes/roles.route'
 import createError from 'http-errors'
 
 
+
 const HEALTH_PATH = environment.healthPath
 // connect SQL
 import sqlConnector from './databaseSql'
@@ -22,8 +23,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect(database.db, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => {
+}).then((mongoDB) => {
     console.log("Mongo connected")
+    // mongoose.connection.db.listCollections().toArray(function (err, names) {
+    //   console.log(names);
+    // });
   },
   error => {
     console.log("Database could't be connected to: " + error)

@@ -5,10 +5,12 @@ import ListMenu from '@/components/Menu/ListMenu.vue'
 import EditProduct from '@/components/Product/EditProduct.vue'
 import ListProduct from '@/components/Product/ListProduct.vue'
 import ListProductClient from '@/components/Product/ListProductClient.vue'
+import Cart from '@/components/User/Cart.vue'
 import Home from '@/components/home.vue'
 import Login from '@/components/User/Login.vue'
 import SignUp from '@/components/User/SignUp.vue'
 import EditProfile from '@/components/User/EditProfile.vue'
+import FollowOrder from '@/components/Order/FollowOrder.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -60,7 +62,16 @@ const routes = [
     name: 'edit-profile',
     component: EditProfile
   },
-  
+  {
+    path: '/cart',
+    name: 'cart',
+    component: Cart
+  },
+  {
+    path: '/follow-orders',
+    name: 'follow-orders',
+    component: FollowOrder
+  },
 ]
 
 const router = new VueRouter({

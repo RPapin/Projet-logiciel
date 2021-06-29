@@ -176,7 +176,6 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
                 console.log('check-user')
                 result["isLoggedIn"] = true
                 result["refreshToken"] = req.refreshToken
-                console.log(result)
                 res.json(result)
             }
         }

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <h1>Liste des produits</h1>
+            <h1>Mon Panier</h1>
             <table class="table table-striped">
                 <thead class="thead-dark">
                     <tr>
@@ -26,7 +26,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart(products)">Ajouter au panier</button></div>
+            <div v-if="products.length !== 0" class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block float-right" v-on:click="valideCart()">Valider la commande</button></div>
         </div>
     </div>
 </template>
@@ -41,32 +41,28 @@
                 products: [],
             }
         },
-        async beforeCreate() {
-            // if(this.userInfo.role_id)
-            const service = new ApiService()
-            //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
-            //let apiURL:string = 'get-all-product';
-            let apiURL:string = 'get-all-product';
-            
-            let authToken:string = localStorage.getItem('AUTH_TOKEN') 
-            let data:any = await service.getCall(apiURL, authToken);
-            
-            this.products = data.products
-            console.log(this.products)
-            this.products.forEach(product => {
-                
-                let cartProduct = this.clientCart.find(x => x._id === product._id)
-                if(cartProduct !== undefined)product['quantity'] = cartProduct['quantity']
-                else product['quantity'] = 0 
-            });
+        created() {
+            this.products = this.clientCart
         },
+
         methods: {
-        ...mapMutations([
-            'updateCart'
-        ]),
+            ...mapMutations([
+                'updateCart'
+            ]),
+            async valideCart(){
+                console.log(this.products)
+                const body = {
+                    account_id : this.userInfo.account_id,
+                    products: this.products
+                }
+                const apiService = new ApiService()
+                let apiURL = 'create-order';
+                await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)))
+            }
         },
         computed: mapState([
             // map this.count to store.state.count
+            'userInfo',
             'clientCart'
             ]),
         components: {
