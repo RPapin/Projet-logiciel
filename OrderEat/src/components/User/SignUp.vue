@@ -75,7 +75,7 @@
                 'updateUserInfo'
             ]),
             handleSubmitForm() {
-                let apiURL = 'http://localhost:4000/api/create-user';
+                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-user';
                 const formData = new FormData();
                 formData.append('data', JSON.stringify(this.user))
                 if(this.picture_profil !== '')formData.append('file', this.picture_profil, this.picture_profil.name);
