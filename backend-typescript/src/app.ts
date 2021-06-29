@@ -31,12 +31,12 @@ mongoose.connect(database.db, {
 )
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(express.static('public'))
-app.use(cors());
 app.use(fileUpload());
 // API
 app.use('/api', orderAPI)
@@ -68,4 +68,4 @@ app.use( (err: any, req: any, res: any, next: any) => {
   res.status(err.statusCode).send(err.message);
 });
 
-//LoadBalancerRegistration()
+LoadBalancerRegistration()
