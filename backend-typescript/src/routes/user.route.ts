@@ -134,6 +134,7 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
                 const listToken: string[] = generateAccessToken(body);
                 redisClient.set(listToken[0], listToken[1], redis.print);
                 result["token"] = listToken[0]
+                result["isLoggedIn"] = true
                 res.json(result)
             }
             //invalid user logs
