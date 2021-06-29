@@ -2,7 +2,6 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3 class="text-center">Se connecter</h3>
-            <span>{{this.error}}</span>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Email</label>
@@ -12,6 +11,10 @@
                 <div class="form-group">
                     <label>Mot de passe</label>
                     <input type="password" class="form-control" v-model="user.password" required>
+                </div>
+
+                <div class="text-danger">
+                    {{this.error}}
                 </div>
 
                 <div class="form-group">
@@ -49,7 +52,7 @@
                 let apiURL = 'login-user';
                 let res = await apiService.postCall(apiURL, JSON.parse(JSON.stringify(this.user)))
                 console.log(res)
-                if(res !== undefined)
+                if(res === undefined)
                 {
                     this.error = "response is undefined"
                 }
