@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-danger btn-block">Valider</button>
+                    <button class="btn btn-success btn-block">Valider</button>
                 </div>
             </form>
             <div class="text-center">
