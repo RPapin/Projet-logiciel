@@ -91,6 +91,7 @@ services:
       - PORT=4000
       - LOAD_BALANCER_HOST=loadbalancer
       - LOAD_BALANCER_PORT=3000
+      - REDIS_HOST=redis
     depends_on:
       - "mongodb"
       - "loadbalancer"
@@ -116,6 +117,7 @@ services:
       - PORT=4000
       - LOAD_BALANCER_HOST=loadbalancer
       - LOAD_BALANCER_PORT=3000
+      - REDIS_HOST=redis
     depends_on:
       - "mongodb"
       - "loadbalancer"

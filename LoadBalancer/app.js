@@ -4,12 +4,24 @@ const cors  = require('cors')
 const port = 3000
 const servers = [];
 
-const handler = async (req, res) => {
+const handlerGET = async (req, res) => {
     try {
         // Higher health mean lowest performance
         const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
         console.log(`[TARGET] ${targetServer.serviceName}`)
         const resp = await axios.get(req.url.split('/api')[1], { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
+        res.json(resp.data)
+    } catch (e){
+        console.log(e)
+    }
+};
+
+const handlerPOST = async (req, res) => {
+    try {
+        // Higher health mean lowest performance
+        const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
+        console.log(`[TARGET] ${targetServer.serviceName}`)
+        const resp = await axios.post(req.url.split('/api')[1], { proxy: { host: targetServer.serviceName, port: targetServer.servicePort }})
         res.json(resp.data)
     } catch (e){
         console.log(e)
@@ -22,7 +34,7 @@ const register = (req, res) => {
     res.end()
 }
 
-const server = express().use(express.json()).get(/^\/api\/.+$/, handler).post(/^\/api\/.+$/, handler).post('/register', register);
+const server = express().use(express.json()).get(/^\/api\/.+$/, handlerGET).post(/^\/api\/.+$/, handlerPOST).post('/register', register);
 server.use(cors());
 server.listen(port)
 
