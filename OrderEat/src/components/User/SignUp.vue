@@ -71,7 +71,7 @@
         },
         methods: {
             ...mapMutations([
-                'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+                'toggleIsLoggedIn', 
                 'updateUserInfo'
             ]),
             handleSubmitForm() {
@@ -84,10 +84,13 @@
                         'accept': 'application/json',
                         'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
                     }
-                }).then((res) => {
-                    this.toggle(true)
+                }).then( async (res) => {
+                    let apiService = new ApiService()
                     localStorage.setItem('AUTH_TOKEN', res.data.token)
-                    //this.updateUserInfo(this.user)
+                    let apiURL = 'check-user';
+                    let _res = await apiService.getCall(apiURL, res.data.token, true)
+                    this.updateUserInfo(_res)
+                    this.toggleIsLoggedIn(true)
                     this.$router.push('/')
                 }).catch(error => {
                     console.log(error)

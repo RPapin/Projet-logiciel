@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
 import database from './databaseMongo'
 import bodyParser from  'body-parser'
 import orderAPI from './routes/order.route'
-import articleAPI from './routes/article.route'
+import productAPI from './routes/product.route'
 import userAPI from './routes/user.route'
 import roleAPI from './routes/roles.route'
 import createError from 'http-errors'
@@ -40,7 +40,7 @@ app.use(cors());
 app.use(fileUpload());
 // API
 app.use('/api', orderAPI)
-app.use('/api', articleAPI)
+app.use('/api', productAPI)
 app.use('/api', userAPI)
 app.use('/api', roleAPI)
 

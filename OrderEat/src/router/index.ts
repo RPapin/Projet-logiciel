@@ -2,8 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import EditMenu from '@/components/Menu/EditMenu.vue'
 import ListMenu from '@/components/Menu/ListMenu.vue'
-import EditArticle from '@/components/Article/EditArticle.vue'
-import ListArticle from '@/components/Article/ListArticle.vue'
+import EditProduct from '@/components/Product/EditProduct.vue'
+import ListProduct from '@/components/Product/ListProduct.vue'
+import ListProductClient from '@/components/Product/ListProductClient.vue'
 import Home from '@/components/home.vue'
 import Login from '@/components/User/Login.vue'
 import SignUp from '@/components/User/SignUp.vue'
@@ -11,6 +12,7 @@ import EditProfile from '@/components/User/EditProfile.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -29,14 +31,19 @@ const routes = [
     component: EditMenu
   },
   {
-    path: '/viewArticle',
-    name: 'viewArticle',
-    component: ListArticle
+    path: '/viewProduct',
+    name: 'viewProduct',
+    component: ListProduct
   },
   {
-    path: '/editArticle/:id',
-    name: 'editArticle',
-    component: EditArticle
+    path: '/viewProductsClient',
+    name: 'viewProductsClient',
+    component: ListProductClient
+  },
+  {
+    path: '/editProduct/:id',
+    name: 'editProduct',
+    component: EditProduct
   },
   {
     path: '/login',

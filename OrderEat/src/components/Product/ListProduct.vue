@@ -11,14 +11,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="article in Articles" :key="article._id">
-                        <td>{{ article.name }}</td>
-                        <td>{{ article.price }} €</td>
-                        <td>{{ article.estimation_time }} min</td>
+                    <tr v-for="product in Products" :key="product._id">
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }} €</td>
+                        <td>{{ product.estimation_time }} min</td>
                         <td>
-                            <router-link :to="{name: 'edit', params: { id: article._id }}" class="btn btn-success">Edit
+                            <router-link :to="{name: 'edit', params: { id: product._id }}" class="btn btn-success">Edit
                             </router-link>
-                            <button @click.prevent="deleteArticle(article._id)" class="btn btn-danger">Delete</button>
+                            <button @click.prevent="deleteProduct(product._id)" class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -30,34 +30,42 @@
 <script lang="ts">
     import axios from "axios";
     import ApiService from "../../services/apiService"
+    import { mapState, mapActions  } from 'vuex'
     export default {
         data() {
             return {
-                Articles: []
+                Products: []
             }
         },
-        async beforeCreate() {
+        async created() {
+            if(this.userInfo.role_name === 'client')this.$router.push('/viewProductsClient')
             const service = new ApiService()
             //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
-            let apiURL:string = 'get-all-article';
+            let apiURL:string = 'get-all-product';
             let authToken:string = localStorage.getItem('AUTH_TOKEN') === null ? "" : localStorage.getItem('AUTH_TOKEN')
             let data:any = await service.getCall(apiURL, authToken);
-            this.Articles = data.articles
+            this.Products = data.products
         },
         methods: {
-            deleteArticle(id:any){
-                let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-article/${id}`;
-                let indexOfArrayItem = this.Articles.findIndex((i:any) => i._id === id);
+            deleteProduct(id:any){
+                let apiURL = `http://${process.env.LOAD_BALANCER_HOST}:${process.env.LOAD_BALANCER_PORT}/api/delete-product/${id}`;
+                let indexOfArrayItem = this.Products.findIndex((i:any) => i._id === id);
 
                 if (window.confirm("Do you really want to delete?")) {
                     axios.delete(apiURL).then(() => {
-                        this.Articles.splice(indexOfArrayItem, 1);
+                        this.Products.splice(indexOfArrayItem, 1);
                     }).catch(error => {
                         console.log(error)
                     });
                 }
-            }
-        }
+            },
+            ...mapActions([
+                'checkUser',
+            ])
+        },
+        computed: mapState([
+                'userInfo'
+            ]),
     }
 </script>
 

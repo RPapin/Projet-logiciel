@@ -7,12 +7,10 @@
                     <label>Addresse</label>
                     <input type="text" class="form-control" v-model="restaurant.address" required>
                 </div>
-
                 <div class="form-group">
                     <label>Nom</label>
                     <input type="text" class="form-control" v-model="restaurant.name" required>
                 </div>
-
                 <div class="form-group">
                     <label>Description</label>
                     <input type="text" class="form-control" v-model="restaurant.description" required>
@@ -22,12 +20,10 @@
                     <label>Tags</label>
                     <input type="text" class="form-control" v-model="restaurant.tags" placeholder="Ex : asian chicken traditional" required>
                 </div>
-
                 <div class="form-group">
                     <label>Image</label>      
                      <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
                 </div>
-
                 <div class="form-group">
                     <button class="btn btn-danger btn-block">Editer</button>
                 </div>

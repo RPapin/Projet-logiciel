@@ -28,8 +28,7 @@
                     <input type="text" class="form-control" v-model="user.phone_number" required>
                 </div>
                 <div class="form-group">
-                    <label>Crédit de parainage</label>
-                    <input type="text" class="form-control" v-model="user.sponsorship_credit" disabled>
+                    <label>Crédit de parainage : <span class="important-text">{{user.sponsorship_credit}} €</span></label>
                 </div>
 
                 <div class="form-group">
@@ -79,11 +78,12 @@
                 console.log(res.message)
             },
             ...mapMutations([
-            'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+            'toggleIsLoggedIn', 
             'updateUserInfo'
             ]),
             ...mapActions([
-                'logout',
+                'logout', 
+                'checkUser'
             ])
         },
         computed: mapState([
@@ -92,14 +92,16 @@
             'userInfo'
             ]),
         async created() {
-            await setTimeout(() => { 
-                console.log(this.userInfo)
-                this.user = this.userInfo 
-            }, 1000)}
-        })
+            await this.checkUser()
+            this.user = this.userInfo 
+        }
+    })
 </script>
 <style >
 .imgProfile {
   width: 300px;
+}
+.important-text {
+    font-weight: bold;
 }
 </style>

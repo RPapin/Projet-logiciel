@@ -5,7 +5,7 @@
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Type</label>
-                    <select v-model="article.type">
+                    <select v-model="product.type">
                         <option disabled value="">Choisissez</option>
                         <option>Nourriture</option>
                         <option>Sauce</option>
@@ -15,12 +15,12 @@
 
                 <div class="form-group">
                     <label>Nom</label>
-                    <input type="text" class="form-control" v-model="article.name" required>
+                    <input type="text" class="form-control" v-model="product.name" required>
                 </div>
 
                 <div class="form-group">
                     <label>Prix ($)</label>
-                    <input type="number" min="0" max="10000" step="0.01" class="form-control" v-model="article.price" required>
+                    <input type="number" min="0" max="10000" step="0.01" class="form-control" v-model="product.price" required>
                 </div>
 
                 <div class="form-group">
@@ -49,7 +49,7 @@
 
         data() {
             return {
-                article: {
+                product: {
                    type: '',
                    name: '',
                    price: '',
@@ -60,11 +60,11 @@
         },
         methods: {
             handleSubmitForm() {
-                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-article';
+                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-product';
                 
-                axios.post(apiURL, this.article).then(() => {
-                  this.$router.push('/viewArticle')
-                  this.article = {
+                axios.post(apiURL, this.product).then(() => {
+                  this.$router.push('/viewProduct')
+                  this.product = {
                     name: '',
                     price: '',
                     image: '',
@@ -75,8 +75,8 @@
                 });
             },
             handleImages(event:any){
-                this.article.image = event.target.files[0]
-                console.log(this.article)
+                this.product.image = event.target.files[0]
+                console.log(this.product)
             }
         },
         components: {

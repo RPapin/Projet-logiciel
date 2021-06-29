@@ -6,13 +6,13 @@
         <router-link class="navbar-brand float-left" to="/"><img src="@/assets/logos/logo_black_transparent.png" class="imgNavbar"/></router-link>
         <ul class="nav navbar-nav flex-row float-right">
           <li class="nav-item">
-            <router-link class="nav-link pr-3" to="/editArticle/0">Creer un Menu</router-link>
+            <router-link class="nav-link pr-3" to="/editProduct/0">Creer un Menu</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link pr-3" to="/editArticle/0">Creer un article</router-link>
+            <router-link class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link pr-3" to="/viewArticle">Voir mes articles</router-link>
+            <router-link class="nav-link pr-3" to="/viewProduct">Voir mes produits</router-link>
           </li>
           <li v-if="this.isLoggedIn" class="nav-item">
             <router-link class="nav-link pr-3" to="edit-profile">Editer mon profile</router-link>
@@ -35,25 +35,13 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import ApiService from "./services/apiService"
+  //import ApiService from "./services/apiService"
   import { mapMutations, mapState, mapActions  } from 'vuex'
 
   export default Vue.extend({
-       async created() {
-        //CHECK IF TOKEN IS VALID
-        let auth_token = localStorage.getItem('AUTH_TOKEN')
-        
-        if(auth_token !== undefined){
-          let apiService = new ApiService()
-          let apiURL = 'check-user';
-          console.log('app created')
-          let res = await apiService.getCall(apiURL, auth_token, true)
-          if(res.isLoggedIn && !this.isLoggedIn){
-            this.updateUserInfo(res)
-            this.toggle(true)
-          } else if(this.isLoggedIn)this.toggle(false)
-        } else if(this.isLoggedIn)this.toggle(false)
 
+       async created() {
+         //this.checkUser()
       },
       computed: mapState([
         // map this.count to store.state.count
@@ -62,11 +50,12 @@
       ]),
       methods: {
         ...mapMutations([
-          'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+          'toggleIsLoggedIn', // map `this.toggleIsLoggedIn()` to `this.$store.commit('toggleIsLoggedIn')`
           'updateUserInfo'
         ]),
         ...mapActions([
           'logout',
+          'checkUser'
         ])
     }
   })  

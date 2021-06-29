@@ -41,7 +41,7 @@
         },
         methods: {
             ...mapMutations([
-                'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+                'toggleIsLoggedIn', 
                 'updateUserInfo'
             ]),
            async handleSubmitForm() {
@@ -53,7 +53,7 @@
                     this.error = res.error
                 } else {
                     //save user info
-                    this.toggle(true)
+                    this.toggleIsLoggedIn(true)
                     localStorage.setItem('AUTH_TOKEN', res.token)
                     this.updateUserInfo(res)
                     this.$router.push('/')

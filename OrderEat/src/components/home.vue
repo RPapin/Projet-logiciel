@@ -7,11 +7,11 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import { mapMutations, mapState  } from 'vuex'
+  import { mapMutations, mapState, mapActions } from 'vuex'
 
   export default Vue.extend({
-      created() {
-
+      async created() {
+        if(this.userInfo.role_name === undefined)await this.checkUser()
       },
       computed: mapState([
         // map this.count to store.state.count
@@ -20,9 +20,12 @@
       ]),
       methods: {
         ...mapMutations([
-          'toggle', // map `this.toggle()` to `this.$store.commit('toggle')`
+          'toggleIsLoggedIn', 
           'updateUserInfo'
         ]),
+        ...mapActions([
+          'checkUser',
+        ])
     }
   })  
 </script>

@@ -5,10 +5,12 @@ const orderRoute = express.Router();
 
 
 orderRoute.route('/get-all-order').get((req, res, next) => {
+  console.log('/get-all-order')
     OrderModel.find((error, data) => {
      if (error) {
        return next(error)
      } else {
+      console.log(data)
        res.json(data)
      }
    })

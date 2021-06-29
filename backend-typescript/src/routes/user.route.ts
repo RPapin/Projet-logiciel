@@ -39,6 +39,24 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
  })
  userRoute.route('/create-user').post((req: any, res, next) => {
     //We need 3 nested sql request so we are using callbacks
+        
+    // INSERT IN THE DATABASE
+    const insertNewUser = (body: { role_id: any; phone_number: any; password: any; first_name: any; last_name: any; email: any; }, sponsorship: any, profilePictureName: any, sponsorshipCredit: any) => {
+        const sql = `INSERT INTO Account VALUES ( ${body.role_id}, ${body.phone_number}, '${body.password}', '${body.first_name}', '${body.last_name}', ${sponsorship}, '${profilePictureName}', '${body.email}',  ${sponsorshipCredit});`
+        const request = new Request(sql, (err) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ msg: "Error occured : " + err });
+            } else {
+                console.log('New user has been inserted')
+                redisClient.set(listToken[0], listToken[1], redis.print);
+                res.json({
+                    token : listToken[0]
+                })
+            }
+        });
+        sqlConnector.execSql(request);
+    }
     let profilePictureName = 'default-profile-picture.png'
     if (req.files) {
         const myFile = req.files.file;
@@ -96,26 +114,10 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
             let result:any = {}
  
         }
+    } else {
+        insertNewUser(body, sponsorship, profilePictureName, sponsorshipCredit)
     }
-    
-    // INSERT IN THE DATABASE
-    const insertNewUser = (body: { role_id: any; phone_number: any; password: any; first_name: any; last_name: any; email: any; }, sponsorship: any, profilePictureName: any, sponsorshipCredit: any) => {
-        const sql = `INSERT INTO Account VALUES ( ${body.role_id}, ${body.phone_number}, '${body.password}', '${body.first_name}', '${body.last_name}', ${sponsorship}, '${profilePictureName}', '${body.email}',  ${sponsorshipCredit});`
-        console.log(sql)
-        const request = new Request(sql, (err) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send({ msg: "Error occured : " + err });
-            } else {
-                console.log('New user has been inserted')
-                redisClient.set(listToken[0], listToken[1], redis.print);
-                res.json({
-                    token : listToken[0]
-                })
-            }
-        });
-        sqlConnector.execSql(request);
-    }
+
  });
  userRoute.route('/login-user').post((req: any, res, next) => {
      console.log('call to login')
@@ -158,7 +160,7 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
     const decodedToken = jwt.decode(token, {
         complete: true
        });
-    const sql = `SELECT * FROM Account WHERE email = '${decodedToken.payload.email}' AND password='${decodedToken.payload.password}';`;
+    const sql = `SELECT a.*, r.* FROM Account as a LEFT JOIN Role as r ON a.role_id = r.role_id WHERE email = '${decodedToken.payload.email}' AND password='${decodedToken.payload.password}';`;
     let result:any = {};
     const request = new Request(sql, (err, rowCount) => {
         if (err) {
@@ -166,14 +168,15 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
         } else {
             //User info has been found
             if(rowCount === 1){
-                console.log(result)
                 if(result["picture_profil"] !== "default-profile-picture.png"){
                     const bitmap = fs.readFileSync(`./public/${result["picture_profil"]}`);
                     const base64 = Buffer.from(bitmap).toString("base64");
                     result["picture_profil"] = base64
                 }
+                console.log('check-user')
                 result["isLoggedIn"] = true
                 result["refreshToken"] = req.refreshToken
+                console.log(result)
                 res.json(result)
             }
         }
@@ -224,7 +227,6 @@ userRoute.route('/delete-user').post(authenticateToken, (req: any, res, next) =>
     const body = req.body 
     
     let profilePictureName = 'default-profile-picture.png'
-    console.log('./public/' + body.picture_profil)
     if (body.picture_profil !== profilePictureName && fs.lstatSync('./public/' + body.picture_profil).isFile()) {
         try {
             fs.unlinkSync(`./public/${body.picture_profil}`)
@@ -234,7 +236,6 @@ userRoute.route('/delete-user').post(authenticateToken, (req: any, res, next) =>
           }
     }
     const sql = `DELETE FROM Account WHERE account_id = ${body.account_id};`
-    console.log(sql)
     let result:any = {};
     const request = new Request(sql, (err, rowCount) => {
         if (err) {
