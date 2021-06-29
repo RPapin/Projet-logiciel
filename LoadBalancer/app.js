@@ -46,7 +46,7 @@ setInterval(async () => {
             axios.get(service.healthPoint, {proxy: { host: service.serviceName, port: service.servicePort}}).then(({data}) => {
                 receptionTimestamp=Date.now()
                 servers[index].health = data.health+(receptionTimestamp-sendTimestamp)
-                console.log(`${service.serviceName}: ${data.health} health`)
+                // console.log(`${service.serviceName}: ${data.health} health`)
             }).catch(error => {
                 if(servers.length > 0 && typeof servers[index] !== 'undefined')
                 {
