@@ -37,7 +37,7 @@ const store = new Vuex.Store({
         let apiService = new ApiService()
         let apiURL = 'check-user';
         let res = await apiService.getCall(apiURL, auth_token, true)
-        console('checkuser is logggin ' + res.isLoggedIn)
+        console.log('Checkuser is login ' + res.isLoggedIn)
         if(res.isLoggedIn){
           commit('updateUserInfo', res)
           commit('toggleIsLoggedIn', true)
