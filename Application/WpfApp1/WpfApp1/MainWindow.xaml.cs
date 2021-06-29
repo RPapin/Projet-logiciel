@@ -47,12 +47,28 @@ namespace WpfApp1
                 passwordBox.Password = "";
             }
             PasswordError.Visibility = Visibility.Hidden;
+
+            // Set backgrounds to White
+            TextBoxLastName.Background = Brushes.White;
+            TextBoxFirstName.Background = Brushes.White;
+            TextBoxPhoneNumber.Background = Brushes.White;
+            TextBoxEmail.Background = Brushes.White;
+            TextBoxRole.Background = Brushes.White;
+            PasswordBoxPassword.Background = Brushes.White;
         }
 
         private void ClearEditForm()
         {
             EditEmailError.Visibility = Visibility.Hidden;
             EditPasswordError.Visibility = Visibility.Hidden;
+
+            // Set backgrounds to White
+            TextBoxEditLastName.Background = Brushes.White;
+            TextBoxEditFirstName.Background = Brushes.White;
+            TextBoxEditPhoneNumber.Background = Brushes.White;
+            TextBoxEditEmail.Background = Brushes.White;
+            TextBoxEditRole.Background = Brushes.White;
+            PasswordBoxEditPassword.Background = Brushes.White;
         }
 
         private void LoadUserList()

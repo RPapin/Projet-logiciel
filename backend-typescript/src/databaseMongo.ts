@@ -1,3 +1,5 @@
+import {environment} from './environment'
+
 export default {
-   db: 'mongodb://localhost:27017/ordereat'
+   db: 'mongodb://'+environment.mongodbHost+':27017/OrderEATMDB'
 }

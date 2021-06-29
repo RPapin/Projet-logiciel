@@ -92,12 +92,14 @@ services:
       - LOAD_BALANCER_HOST=loadbalancer
       - LOAD_BALANCER_PORT=3000
       - REDIS_HOST=redis
+      - MONGODB_HOST=mongodb
     depends_on:
       - "mongodb"
       - "loadbalancer"
       - "redis"
     links:
       - redis
+      - mongodb
       
   # Our second express backend application
   express2:
@@ -118,12 +120,14 @@ services:
       - LOAD_BALANCER_HOST=loadbalancer
       - LOAD_BALANCER_PORT=3000
       - REDIS_HOST=redis
+      - MONGODB_HOST=mongodb
     depends_on:
       - "mongodb"
       - "loadbalancer"
       - "redis"
     links:
       - redis
+      - mongodb
 
 volumes:
   mongodata:

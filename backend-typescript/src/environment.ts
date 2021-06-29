@@ -15,5 +15,6 @@ export let environment = {
     	port: process.env.LOAD_BALANCER_PORT
     },
     redisHost: process.env.REDIS_HOST || "localhost",
-    pusher_secret: process.env.PUSHER_SECRET
+    pusher_secret: process.env.PUSHER_SECRET,
+    mongodbHost: process.env.MONGODB_HOST || "localhost"
 }

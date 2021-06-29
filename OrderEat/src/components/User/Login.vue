@@ -2,7 +2,6 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3 class="text-center">Se connecter</h3>
-            <span>{{this.error}}</span>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Email</label>
@@ -14,8 +13,12 @@
                     <input type="password" class="form-control" v-model="user.password" required>
                 </div>
 
+                <div class="text-danger">
+                    {{this.error}}
+                </div>
+
                 <div class="form-group">
-                    <button class="btn btn-danger btn-block">Valider</button>
+                    <button class="btn btn-success btn-block">Valider</button>
                 </div>
             </form>
             <div class="text-center">
@@ -49,7 +52,11 @@
                 let apiURL = 'login-user';
                 let res = await apiService.postCall(apiURL, JSON.parse(JSON.stringify(this.user)))
                 console.log(res)
-                if('error' in res){
+                if(res === undefined)
+                {
+                    this.error = "response is undefined"
+                }
+                else if('error' in res){
                     this.error = res.error
                 } else {
                     //save user info
