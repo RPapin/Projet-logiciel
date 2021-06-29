@@ -14,5 +14,6 @@ export let environment = {
     	host: process.env.LOAD_BALANCER_HOST,
     	port: process.env.LOAD_BALANCER_PORT
     },
-    redisHost: process.env.REDIS_HOST || "localhost"
+    redisHost: process.env.REDIS_HOST || "localhost",
+    mongodbHost: process.env.MONGODB_HOST || "localhost"
 }
