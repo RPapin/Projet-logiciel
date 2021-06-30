@@ -11,6 +11,7 @@ import Login from '@/components/User/Login.vue'
 import SignUp from '@/components/User/SignUp.vue'
 import EditProfile from '@/components/User/EditProfile.vue'
 import FollowOrder from '@/components/Order/FollowOrder.vue'
+import Command from '@/components/Restaurant/Command.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -21,6 +22,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/command/:restaurantId',
+    name: 'command',
+    component: Command
   },
   {
     path: '/viewMenu',

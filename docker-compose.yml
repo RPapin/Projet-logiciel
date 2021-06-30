@@ -12,10 +12,8 @@ services:
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=ordereat
-      - MONGO_INITDB_ROOT_PASSWORD=adminEAT123*
+      - MONGO_INITDB_ROOT_PASSWORD=adminEAT123
       - MONGO_INITDB_DATABASE=OrderEATMDB
-    logging:
-      driver: none
 
   # Mongo express
   mongo-express:
@@ -26,14 +24,12 @@ services:
       - "8085:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=ordereat
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=adminEAT123*
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=adminEAT123
       - ME_CONFIG_MONGODB_SERVER=mongodbelective
     depends_on:
       - mongodb
     links:
       - mongodb
-    logging:
-      driver: none
 
   # Our load balancer
   loadbalancer:
@@ -70,8 +66,6 @@ services:
     image: redis
     ports:
       - '6379:6379'
-    logging:
-      driver: none
 
   # Our first express backend application
   express1:

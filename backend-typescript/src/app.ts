@@ -10,6 +10,8 @@ import orderAPI from './routes/order.route'
 import productAPI from './routes/product.route'
 import userAPI from './routes/user.route'
 import roleAPI from './routes/roles.route'
+import restaurantAPI from './routes/restaurant.route'
+import menuAPI from './routes/menu.route'
 import createError from 'http-errors'
 
 
@@ -21,16 +23,18 @@ sqlConnector.connect()
 // Connect mongoDB
 mongoose.Promise = global.Promise;
 mongoose.connect(database.db, {
+    authSource: 'admin',
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then((mongoDB) => {
     console.log("Mongo connected")
-    // mongoose.connection.db.listCollections().toArray(function (err, names) {
-    //   console.log(names);
-    // });
+    mongoose.connection.db.listCollections().toArray(function (err, names) {
+      console.log(names);
+    });
   },
   error => {
     console.log("Database could't be connected to: " + error)
+    console.log("Using : "+database.db)
   }
 )
 
@@ -47,6 +51,8 @@ app.use('/api', orderAPI)
 app.use('/api', productAPI)
 app.use('/api', userAPI)
 app.use('/api', roleAPI)
+app.use('/api', restaurantAPI)
+app.use('/api', menuAPI)
 
 
 // Health route for load balancing
