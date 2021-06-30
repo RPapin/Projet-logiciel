@@ -118,3 +118,4 @@ MongoDb/data/mongod.lock
 MongoDb/data/WiredTiger.turtle
 backend-typeScript/public/*
 WiredTiger.lock
+backend-typescript/src/databaseMongo.ts

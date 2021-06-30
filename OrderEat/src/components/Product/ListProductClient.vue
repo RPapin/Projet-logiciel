@@ -26,7 +26,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart(products)">Ajouter au panier</button></div>
+            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart(CurrentRestaurantProducts)">Ajouter au panier</button></div>
         </div>
     </div>
 </template>
@@ -38,11 +38,11 @@
     export default {
         data() {
             return {
-                products: [],
                 CurrentRestaurantProducts:[]
             }
         },
-        async beforeCreate() {
+        async created() {
+            console.log(this.restaurantId)
             // if(this.userInfo.role_id)
             const service = new ApiService()
             //let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/';
@@ -51,16 +51,15 @@
             
             let authToken:string = localStorage.getItem('AUTH_TOKEN') 
             let data:any = await service.getCall(apiURL, authToken);
-            
-            this.products = data.products
+
             console.log(this.products)
-            this.products.forEach(product => {
+            data.products.forEach(product => {
                 
                 let cartProduct = this.clientCart.find(x => x._id === product._id)
                 if(cartProduct !== undefined)product['quantity'] = cartProduct['quantity']
                 else product['quantity'] = 0 
-
                 if(product.restaurant_id == this.restaurantId)
+
                 {
                     this.CurrentRestaurantProducts.push(product)
                 }
