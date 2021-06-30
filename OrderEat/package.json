@@ -5,6 +5,7 @@
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-bundle": "vue-cli-service build --target lib --name ordereat ./src/App.vue",
     "lint": "vue-cli-service lint",
     "clean": "rimraf dist/*",
     "tsc": "tsc",
