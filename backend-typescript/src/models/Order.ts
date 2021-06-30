@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
   restaurant_id: {
-    type: String
+    type: Schema.Types.ObjectId
   },
   client_id: {
     type: String

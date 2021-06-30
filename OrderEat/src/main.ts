@@ -34,14 +34,24 @@ const store = new Vuex.Store({
     updateOrdersInfo(state, newOrdersInfo){
       state.ordersInfo = newOrdersInfo
     },
-    updateCart(state, newCart){
+    updateCart(state, {newCart, isProduct}){
       let indexToRemove = []
       newCart.forEach((element) => {
         console.log(element.quantity)
-        if(element.quantity === 0)indexToRemove.push(element)
+        if(element.quantity === 0)
+        {
+          indexToRemove.push(element._id)
+        }
+        else
+        {
+          state.clientCart.push({
+            item_id: element._id,
+            item_type: (isProduct ? 'product' : 'menu'),
+            quantity: element.quantity
+          })
+        }
       });
-      newCart = newCart.filter( ( el ) => !indexToRemove.includes( el ) );
-      state.clientCart = newCart
+      state.clientCart = state.clientCart.filter( ( el ) => !indexToRemove.includes( el._id ) );
     }
   },
   actions : {

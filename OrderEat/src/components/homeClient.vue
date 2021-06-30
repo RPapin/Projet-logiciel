@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row border border-primary rounded m-2" v-for="(restaurant, index) in Restaurants" :key="restaurant._id">
+    <div class="row border border-primary rounded m-2" v-for="restaurant in Restaurants" :key="restaurant._id">
       <div class="col-md-12">
         <h4>{{ restaurant.name }}</h4>
       </div>
@@ -13,7 +13,7 @@
         <small class="text-success">{{ restaurant.tags }}</small>
       </div>
       <div class="col-md-12">
-        <router-link :to="'command/' + index" class="btn btn-success">Commander</router-link>
+        <router-link :to="'command/' + restaurant._id" class="btn btn-success">Commander</router-link>
       </div>
     </div>
   </div>
