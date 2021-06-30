@@ -10,9 +10,9 @@ productRoute.route('/get-all-product').get(authenticateToken, (req: any, res, ne
       if (error) {
         return next(error)
       } else {
+        console.log(data)
         res.json({
-          products : data,
-          refreshToken : req.refreshToken
+          products : data
         })
       }
     })

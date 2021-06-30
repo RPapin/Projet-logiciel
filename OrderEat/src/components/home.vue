@@ -5,22 +5,6 @@
             <h3 class="text-center">Bienvenue sur OrderEat<span v-if="this.userInfo.first_name !== undefined">, {{this.userInfo.first_name}} {{this.userInfo.last_name}}</span></h3>
         </div>
     </div>
-    <div class="row border border-primary rounded m-2" v-for="(restaurant, index) in Restaurants" :key="restaurant._id">
-      <div class="col-md-12">
-        <h4>{{ restaurant.name }}</h4>
-      </div>
-      <div class="col-md-6">
-        <p>{{ restaurant.description }}</p>
-        <small>{{ restaurant.address }}</small>
-      </div>
-      <div class="col-md-6">
-        <img :src="restaurant.picture" class="img-thumbnail" alt="">
-        <small class="text-success">{{ restaurant.tags }}</small>
-      </div>
-      <div class="col-md-12">
-        <router-link :to="{name: 'command', params: { restaurant_id: index }}" class="btn btn-success">Commander</router-link>
-      </div>
-    </div>
   </div>
 </template>
 <script lang="ts">

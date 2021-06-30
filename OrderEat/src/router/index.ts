@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import EditMenu from '@/components/Menu/EditMenu.vue'
 import ListMenu from '@/components/Menu/ListMenu.vue'
 import EditProduct from '@/components/Product/EditProduct.vue'
-import ListProduct from '@/components/Product/ListProduct.vue'
 import ListProductClient from '@/components/Product/ListProductClient.vue'
 import Cart from '@/components/User/Cart.vue'
 import Home from '@/components/home.vue'
@@ -14,6 +13,7 @@ import FollowOrder from '@/components/Order/FollowOrder.vue'
 import TakeOrder from '@/components/Order/TakeOrder.vue'
 import AdminTable from '@/components/Admin/AdminTable.vue'
 import Command from '@/components/Restaurant/Command.vue'
+import HomeClient from '@/components/homeClient.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/viewProduct',
     name: 'viewProduct',
-    component: ListProduct
+    component: HomeClient
   },
   {
     path: '/viewProductsClient',
