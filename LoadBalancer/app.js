@@ -30,7 +30,7 @@ const handlerGET = async (req, res) => {
         const resp = await axios.get(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, config)
         res.json(resp.data)
     } catch (e){
-        console.log(e)
+        console.log("[ERROR] GET :"+e)
     }
 };
 
@@ -48,7 +48,25 @@ const handlerPOST = async (req, res) => {
         const resp = await axios.post(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body, config)
         res.json(resp.data)
     } catch (e){
-        console.log(e)
+        console.log("[ERROR] POST :"+e)
+    }
+};
+
+const handlerDELETE = async (req, res) => {
+    try {
+        // Higher health mean lowest performance
+        const targetServer = getTargetServer()
+
+        let config = {
+          headers: {
+              authorization: req.headers.authorization
+          }
+        }
+
+        const resp = await axios.delete(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body, config)
+        res.json(resp.data)
+    } catch (e){
+        console.log("[ERROR] DELETE :"+e)
     }
 };
 
@@ -60,7 +78,7 @@ const register = (req, res) => {
 
 const server = express()
 server.use(cors())
-server.use(express.json()).get(/^\/api\/.+$/, handlerGET).post(/^\/api\/.+$/, handlerPOST).post('/register', register);
+server.use(express.json()).get(/^\/api\/.+$/, handlerGET).post(/^\/api\/.+$/, handlerPOST).delete(/^\/api\/.+$/, handlerDELETE).post('/register', register);
 server.listen(port)
 
 setInterval(async () => {

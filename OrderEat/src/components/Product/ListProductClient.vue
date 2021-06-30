@@ -12,7 +12,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(product) in products" :key="product._id">
+                    <tr v-for="(product) in CurrentRestaurantProducts" :key="product._id">
                         <td>{{ product.name }}</td>
                         <td>{{ product.price }} €</td>
                         <td>{{ product.estimation_time }} min</td>
@@ -39,6 +39,7 @@
         data() {
             return {
                 products: [],
+                CurrentRestaurantProducts:[]
             }
         },
         async beforeCreate() {
@@ -58,8 +59,16 @@
                 let cartProduct = this.clientCart.find(x => x._id === product._id)
                 if(cartProduct !== undefined)product['quantity'] = cartProduct['quantity']
                 else product['quantity'] = 0 
+
+                if(product.restaurant_id == this.restaurantId)
+                {
+                    this.CurrentRestaurantProducts.push(product)
+                }
             });
         },
+        props: [
+            'restaurantId'
+        ],
         methods: {
         ...mapMutations([
             'updateCart'

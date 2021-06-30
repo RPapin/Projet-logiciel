@@ -95,6 +95,28 @@ db.product.insert({
   "picture" : ""
 });
 
+db.product.insert({
+  "_id": 6,
+  "restaurant_id" : 1,
+  "type" : "drink",
+  "name" : "Coca-Cola",
+  "description" : "Une boisson delicieuse",
+  "price" : 2.00,
+  "estimation_time" : 0,
+  "picture" : ""
+});
+
+db.product.insert({
+  "_id": 7,
+  "restaurant_id" : 2,
+  "type" : "drink",
+  "name" : "Pepsi-Cola",
+  "description" : "Une boisson delicieuse",
+  "price" : 2.00,
+  "estimation_time" : 0,
+  "picture" : ""
+});
+
 db.menu.insert({
   "_id": 0,
   "restaurant_id" : 0,
@@ -106,6 +128,30 @@ db.menu.insert({
   "menu_composition" : [
     {
       "product_id" : 0,
+      "quantity" : 1
+    },
+    {
+      "product_id" : 4,
+      "quantity" : 1
+    },
+    {
+      "product_id" : 5,
+      "quantity" : 4
+    }
+  ]
+});
+
+db.menu.insert({
+  "_id": 1,
+  "restaurant_id" : 0,
+  "name" : "Menu Norvegien",
+  "description" : "Un menu delicieux",
+  "price" : 11.50,
+  "estimation_time" : 40,
+  "picture" : "",
+  "menu_composition" : [
+    {
+      "product_id" : 3,
       "quantity" : 1
     },
     {

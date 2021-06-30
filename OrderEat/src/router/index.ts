@@ -13,6 +13,7 @@ import EditProfile from '@/components/User/EditProfile.vue'
 import FollowOrder from '@/components/Order/FollowOrder.vue'
 import TakeOrder from '@/components/Order/TakeOrder.vue'
 import AdminTable from '@/components/Admin/AdminTable.vue'
+import Command from '@/components/Restaurant/Command.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -23,6 +24,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/command/:restaurantId',
+    name: 'command',
+    component: Command
   },
   {
     path: '/viewMenu',

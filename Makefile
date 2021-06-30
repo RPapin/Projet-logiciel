@@ -32,6 +32,9 @@ start: up
 mdbshell:
 	docker exec -it mongodbelective bash
 
+ordereatshell:
+	docker exec -it ordereat bash
+
 removevolumes:
 	docker volume rm projet-logiciel_mongodata
 
