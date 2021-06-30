@@ -12,7 +12,7 @@ const orderSchema = new Schema({
     type: String
   },
   order_item: {
-    type: [{item_id:String, item_name:String, quantity:Number}]
+    type: [{item_id:String, item_type:String, quantity:Number}]
   },
   state : {
     type: String
