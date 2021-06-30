@@ -41,8 +41,27 @@
                 products: [],
             }
         },
-        created() {
-            this.products = this.clientCart
+        async created() {
+            const service = new ApiService()
+            let authToken:string = localStorage.getItem('AUTH_TOKEN') 
+
+            let data:any = await service.getCall('get-all-product', authToken);
+            let dbProducts = data.products
+            data = await service.getCall('menus', authToken);
+            let dbMenus = data.menus
+
+            this.clientCart.forEach(cartProduct => {
+                if(cartProduct.item_type == "product")
+                {
+                    this.products.push(dbProducts.find(product => product._id === cartProduct.item_id))
+                }
+                else if(cartProduct.item_type == "menu")
+                {
+                    this.products.push(dbMenus.find(menu => menu._id === cartProduct.item_id))
+                }
+
+                if(this.products.length > 0)this.products[this.products.length-1].quantity = cartProduct.quantity
+            })
         },
 
         methods: {

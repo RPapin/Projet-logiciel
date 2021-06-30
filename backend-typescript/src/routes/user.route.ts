@@ -16,7 +16,27 @@ const TYPES = tedious.TYPES;
 interface RowResult {
     string: string;
   }
-
+  userRoute.route('/get-client-account').get(authenticateToken, (req, res, next) => {
+    const sql = `SELECT * FROM Account WHERE role_id = 3;`;
+    let result:any = [];
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+        } else {
+          //User info has been found
+          res.json(result)
+        }
+    });
+  
+    request.on('row', (columns) => {
+        let resLocal:any = {}
+        columns.forEach((column) => {
+            resLocal[column.metadata.colName] = column.value
+        });
+        result.push(resLocal)
+    });
+    sqlConnector.execSql(request);
+  })
 userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     const request = new Request("SELECT r.role_name FROM Account as a LEFT JOIN Role as r ON a.role_id = r.role_id WHERE a.account_id = "+req.params.id+" ;", (err) => {
         if (err) {
@@ -79,7 +99,6 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     let sponsorshipCredit = 0
     let theSponsorCredit = 0
     let theSponsorId 
-    console.log(body)
     if(body.sponsorship_on_sign_up !== ''){
         let result:any = {}
         const sqlSelect = `SELECT * FROM Account WHERE sponsorship = ${body.sponsorship_on_sign_up};`
@@ -248,4 +267,23 @@ userRoute.route('/delete-user').post(authenticateToken, (req: any, res, next) =>
     });
     sqlConnector.execSql(request);
 })
+userRoute.route('/get-user-by-id/:id').get(authenticateToken, (req: any, res, next) => {
+    const sql = `SELECT * FROM Account WHERE account_id = ${req.params.id};`
+    let result:any = {};
+    const request = new Request(sql, (err, rowCount) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send({ message: "Error occured" });
+        } else {
+            res.json(result)
+        }
+    });
+    request.on('row', (columns) => {
+        columns.forEach((column) => {
+            result[column.metadata.colName] = column.value
+        });
+    });
+    sqlConnector.execSql(request);
+})
+
 export default userRoute

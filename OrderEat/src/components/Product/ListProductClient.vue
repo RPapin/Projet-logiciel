@@ -26,7 +26,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart(CurrentRestaurantProducts)">Ajouter au panier</button></div>
+            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart({newCart:CurrentRestaurantProducts, isProduct:true})">Ajouter au panier</button></div>
         </div>
     </div>
 </template>
