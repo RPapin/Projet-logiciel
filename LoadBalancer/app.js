@@ -4,12 +4,30 @@ const cors  = require('cors')
 const port = 3000
 const servers = [];
 
+const getTargetServer = () => {
+    // Higher health mean lowest performance
+    if(servers.length > 0)
+    {
+        let targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
+        console.log(`[TARGET] ${targetServer.serviceName}`)
+
+        return targetServer;
+    }
+    return undefined
+}
+
 const handlerGET = async (req, res) => {
     try {
         // Higher health mean lowest performance
-        const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
-        console.log(`[TARGET] ${targetServer.serviceName}`)
-        const resp = await axios.get(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body)
+        const targetServer = getTargetServer()
+
+        let config = {
+          headers: {
+              authorization: req.headers.authorization
+          }
+        }
+
+        const resp = await axios.get(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, config)
         res.json(resp.data)
     } catch (e){
         console.log(e)
@@ -19,9 +37,15 @@ const handlerGET = async (req, res) => {
 const handlerPOST = async (req, res) => {
     try {
         // Higher health mean lowest performance
-        const targetServer = servers.map(v => v).sort((a, b) => a.health - b.health)[0]
-        console.log(`[TARGET] ${targetServer.serviceName}`)
-        const resp = await axios.post(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body)
+        const targetServer = getTargetServer()
+
+        let config = {
+          headers: {
+              authorization: req.headers.authorization
+          }
+        }
+
+        const resp = await axios.post(`http://${targetServer.serviceName}:${targetServer.servicePort}${req.url}`, req.body, config)
         res.json(resp.data)
     } catch (e){
         console.log(e)

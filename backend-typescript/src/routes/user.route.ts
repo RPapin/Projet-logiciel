@@ -169,7 +169,7 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
         } else {
             //User info has been found
             if(rowCount === 1){
-                if(result["picture_profil"] !== "default-profile-picture.png"){
+                if(result["picture_profil"] !== "default-profile-picture.png" && result["picture_profil"] !== null){
                     const bitmap = fs.readFileSync(`./public/${result["picture_profil"]}`);
                     const base64 = Buffer.from(bitmap).toString("base64");
                     result["picture_profil"] = base64
