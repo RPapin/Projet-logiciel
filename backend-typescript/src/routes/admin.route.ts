@@ -2,10 +2,13 @@ import express from 'express'
 import { NativeError, Document } from 'mongoose';
 import {authenticateToken} from '../authJWT'
 import AdminModel from '../models/Admin'
+import OrderModel from '../models/Order'
+import * as tedious from 'tedious';
+import sqlConnector from '../databaseSql'
 import pusher from '../pusher.config'
 const adminRoute = express.Router();
 
-
+const Request = tedious.Request;
 adminRoute.route('/get-connexion-log').get(authenticateToken, (req, res, next) => {
   console.log('/get-all-admin')
   let totalLog = 0
@@ -50,6 +53,66 @@ adminRoute.route('/get-connexion-log').get(authenticateToken, (req, res, next) =
     }
   })
 });
+adminRoute.route('/get-product-popularity').get(authenticateToken, (req, res, next) => {
+  //menu
+  let menu:any[] = []
+  let article:any[] = []
+  let aggregatorOpts = [{
+    $match : {"order_item.item_type" : {$eq : "menu"}}
+    },{
+    $group: {
+      _id: "$order_item.item_id",
+      count: { $sum: 1 }
+    }
+  }]
+  OrderModel.aggregate(aggregatorOpts).sort({count: 'desc'}).exec((err, result) => {
+    if (err) {
+      return next(err)
+    } else {
+      menu = result
+    }
+  })
+  //article
+  aggregatorOpts = [{
+    $match : {"order_item.item_type" : {$eq : "article"}}
+    },{
+    $group: {
+      _id: "$order_item.item_id",
+      count: { $sum: 1 }
+    }
+  }]
+  OrderModel.aggregate(aggregatorOpts).sort({count: 'desc'}).exec((err, result) => {
+    if (err) {
+      return next(err)
+    } else {
+      article = result
+      res.json({
+        menu,
+        article
+      })
+    }
+  })
+})
+// adminRoute.route('/get-client-account').get(authenticateToken, (req, res, next) => {
+//   const sql = `SELECT * FROM Account WHERE role_id = 3;`;
+//   let result:any = {};
+//   const request = new Request(sql, (err, rowCount) => {
+//       if (err) {
+//           console.error(err.message);
+//       } else {
+//         //User info has been found
+//         console.log(result)
+//         res.json(result)
+//       }
+//   });
+
+//   request.on('row', (columns) => {
+//       columns.forEach((column) => {
+//           result[column.metadata.colName] = column.value
+//       });
+//   });
+//   sqlConnector.execSql(request);
+// })
 
 adminRoute.route('/get-admin-by-id/:id').get((req, res, next) => {
   console.log('et-admin-by')

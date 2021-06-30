@@ -30,9 +30,6 @@ mongoose.connect(database.db, {
     useUnifiedTopology: true
 }).then((mongoDB) => {
     console.log("Mongo connected")
-    mongoose.connection.db.listCollections().toArray(function (err, names) {
-      console.log(names);
-    });
   },
   error => {
     console.log("Database could't be connected to: " + error)

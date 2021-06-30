@@ -12,8 +12,11 @@ import EditProfile from '@/components/User/EditProfile.vue'
 import FollowOrder from '@/components/Order/FollowOrder.vue'
 import TakeOrder from '@/components/Order/TakeOrder.vue'
 import AdminTable from '@/components/Admin/AdminTable.vue'
+import AccountTable from '@/components/Admin/AccountTable.vue'
+import AdminCommercial from '@/components/Admin/AdminCommercial.vue'
 import Command from '@/components/Restaurant/Command.vue'
 import HomeClient from '@/components/homeClient.vue'
+
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -71,6 +74,11 @@ const routes = [
     component: EditProfile
   },
   {
+    path: '/edit-profile/:id',
+    name: 'edit-profile',
+    component: EditProfile
+  },
+  {
     path: '/cart',
     name: 'cart',
     component: Cart
@@ -89,6 +97,16 @@ const routes = [
     path: '/admin-table',
     name: 'admin-table',
     component: AdminTable
+  },
+  {
+    path: '/admin-commercial',
+    name: 'admin-commercial',
+    component: AdminCommercial
+  },
+  {
+    path: '/account-table',
+    name: 'account-table',
+    component: AccountTable
   },
 ]
 
