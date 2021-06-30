@@ -18,12 +18,13 @@ export default Vue.extend({
           }
       },
       async created() {
+        this.restaurant_id = this.$route.params.restaurantId
+        
         const service = new ApiService()
         let apiURL:string = 'restaurants';
         let authToken:string = localStorage.getItem('AUTH_TOKEN') === null ? "" : localStorage.getItem('AUTH_TOKEN')
         let data:any = await service.getCall(apiURL, authToken);
         this.Restaurants = data.restaurants
-        this.restaurant_id = this.$route.params.restaurantId
       },
       components: {
         ListProductClient,

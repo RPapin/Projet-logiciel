@@ -35,19 +35,17 @@
     export default {
         data() {
             return {
-                Menus: [],
                 CurrentRestaurantMenus:[]
             }
         },
-        async beforeCreate() {
+        async created() {
             const service = new ApiService()
             let apiURL:string = 'menus';
             
             let authToken:string = localStorage.getItem('AUTH_TOKEN') 
             let data:any = await service.getCall(apiURL, authToken);
             
-            this.Menus = data.menus
-            this.Menus.forEach(menu => {
+            data.menus.forEach(menu => {
                 
                 let cartProduct = this.clientCart.find(x => x._id === menu._id)
                 if(cartProduct !== undefined)menu['quantity'] = cartProduct['quantity']
