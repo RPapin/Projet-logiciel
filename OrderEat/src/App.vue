@@ -12,13 +12,19 @@
             <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="this.isLoggedIn" class="nav-link pr-3" to="/viewProduct">Voir les produits</router-link>
+            <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/viewProduct">Voir les produits</router-link>
           </li>
           <li class="nav-item">
             <router-link v-if="this.seeCart.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/cart" >Voir mon panier<span v-if="this.clientCart.length !== 0" class="notif">{{this.clientCart.length}}</span></router-link>
           </li>
+          <li class="nav-item">
+            <router-link  v-if="this.seeTakeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/take-order" >Prendre une livraison<span v-if="this.takeOrderInfo.length !== 0" class="notif">{{this.takeOrderInfo.length}}</span></router-link>
+          </li>
            <li class="nav-item">
-            <router-link  v-if="this.isLoggedIn" class="nav-link pr-3 notif-container" to="/follow-orders" >Suivre mes commandes<span v-if="this.ordersInfo.length !== 0" class="notif">{{this.ordersInfo.length}}</span></router-link>
+            <router-link  v-if="this.seeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/follow-orders" >Suivre les commandes<span v-if="this.ordersInfo.length !== 0" class="notif">{{this.ordersInfo.length}}</span></router-link>
+          </li>
+          <li class="nav-item">
+            <router-link v-if="this.seeAdmin.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-table">Tableau d'Administration</router-link>
           </li>
           <li v-if="this.isLoggedIn" class="nav-item">
             <router-link class="nav-link pr-3" to="edit-profile">Editer mon profile</router-link>
@@ -49,14 +55,25 @@
       data() {
         return {
           seeMenu : ['admin', 'restaurateur'],
-          seeCart : ['client'],
-          orderInfo : []
+          seeProduct : ['admin', 'restaurateur', 'client'],
+          seeCart : ['admin', 'client'],
+          seeTakeOrder : ['livreur'],
+          seeOrder : ['admin', 'restaurateur', 'client', 'livreur', 'commercial'],
+          seeAdmin : ['technique'],
+          takeOrderInfo : []
         }
       },
       async created() {
         await this.checkUser()
-        if(this.userInfo.role_id === 3 || this.userInfo.role_id === 2)await this.fetchOrders(this.userInfo.account_id) //client ou restaurateur
-        else if(this.userInfo.role_id === 4)await this.fetchOrders()//livreur
+        if(this.userInfo.role_id === 3 )await this.fetchOrders(this.userInfo.account_id) //client 
+        else if(this.userInfo.role_id === 4 || this.userInfo.role_id === 2 || this.userInfo.role_id === 5){
+          await this.fetchOrders()//livreur ou restaurateur ou service commerciale
+          this.ordersInfo.forEach(order => {
+            if(order.state === "Recherche de livreur"){
+              this.takeOrderInfo.push(order)
+            }
+          });
+        }
         //event listener => new order
         // var channel = this.$pusher.subscribe('order');
         // channel.bind("new-order", () => {

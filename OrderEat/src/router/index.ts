@@ -11,6 +11,8 @@ import Login from '@/components/User/Login.vue'
 import SignUp from '@/components/User/SignUp.vue'
 import EditProfile from '@/components/User/EditProfile.vue'
 import FollowOrder from '@/components/Order/FollowOrder.vue'
+import TakeOrder from '@/components/Order/TakeOrder.vue'
+import AdminTable from '@/components/Admin/AdminTable.vue'
 // import { Route } from '../interface'
 
 Vue.use(VueRouter)
@@ -71,6 +73,16 @@ const routes = [
     path: '/follow-orders',
     name: 'follow-orders',
     component: FollowOrder
+  },
+  {
+    path: '/take-order',
+    name: 'take-order',
+    component: TakeOrder
+  },
+  {
+    path: '/admin-table',
+    name: 'admin-table',
+    component: AdminTable
   },
 ]
 

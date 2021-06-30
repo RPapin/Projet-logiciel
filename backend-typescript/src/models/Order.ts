@@ -8,8 +8,11 @@ const orderSchema = new Schema({
   client_id: {
     type: String
   },
+  livreur_id: {
+    type: String
+  },
   order_item: {
-    type: [{item_id:String, quantity:Number}]
+    type: [{item_id:String, item_name:String, quantity:Number}]
   },
   state : {
     type: String

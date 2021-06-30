@@ -28,6 +28,9 @@
                     <input type="text" class="form-control" v-model="user.phone_number" required>
                 </div>
                 <div class="form-group">
+                    <label>Code de parainage : <span class="important-text">{{user.sponsorship}}</span></label>
+                </div>
+                <div class="form-group">
                     <label>Crédit de parainage : <span class="important-text">{{user.sponsorship_credit}} €</span></label>
                 </div>
 

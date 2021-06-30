@@ -7,20 +7,45 @@
                     <tr>
                         <th>Horaire de livraison estimé</th>
                         <th>Statut</th>
+                        <th>Articles </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="order in orders" :key="order._id">
+                    <tr v-for="(order, i) in orders" :key="order._id">
                         <td>{{ order.estimation_time }}</td>
+                        <!-- LIVREUR -->
                         <td v-if="userInfo.role_id === 4" > 
-                            <select type="text" class="form-control" v-model="order.state" @change="(e) => updateOrder(e, order._id)" required>
-                                <option value="Recherche de livreur">Recherche de livreur</option>
+                            <select type="text" class="form-control"  @change="(e) => updateOrder(e, order._id, i)" :value="order.state"  required :disabled="seeLivreurSelect.includes(order.state)">
+                                <option value="En preparation" disabled>En preparation</option>
+                                <option value="En attente du livreur" disabled>En attente du livreur</option>
+                                <option value="livraison en cours">livraison en cours</option>
+                                <option value="Terminé">Terminé</option>
+                            </select>
+                        </td>
+                        <!-- RESTO -->
+                        <td v-else-if="userInfo.role_id === 2" > 
+                            <select type="text" class="form-control"  @change="(e) => updateOrder(e, order._id, i)" :value="order.state"  required :disabled="seeRestoSelect.includes(order.state)">
+                                <option value='Recherche de livreur' disabled>Recherche de livreur</option>
                                 <option value="En preparation">En preparation</option>
+                                <option value="En attente du livreur">En attente du livreur</option>
+                            </select>
+                        </td>
+                        <!-- COMMERCIAL -->
+                        <td v-else-if="userInfo.role_id === 5" > 
+                            <select type="text" class="form-control"   :value="order.state"  disabled>
+                                <option value='Recherche de livreur'>Recherche de livreur</option>
+                                <option value="En preparation">En preparation</option>
+                                <option value="En attente du livreur" >En attente du livreur</option>
                                 <option value="livraison en cours">livraison en cours</option>
                                 <option value="Terminé">Terminé</option>
                             </select>
                         </td>
                         <td v-else>{{ order.state }}</td>
+                        <td>
+                            <div v-for="item in order.items" :key="item._id">
+                                {{item.quantity}}  {{item.item_name}} 
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -36,32 +61,21 @@
   export default Vue.extend({
       data() {
         return {
-            orders : []
+            orders : [],
+            reload: false,
+            seeLivreurSelect : ['Terminé', "En preparation"],
+            seeRestoSelect : ['Terminé', "En attente du livreur", "livraison en cours", 'Recherche de livreur'],
         }
       },
        async created() {
-           let ordersList = []
+           console.log('created')
            if(!this.ordersInfo[0]){
                await setTimeout(() => {
-                   ordersList = this.ordersInfo
-                   ordersList.forEach((order) => {
-                    this.orders.push({
-                        _id: order._id,
-                        estimation_time: moment(order.estimation_time).format('HH:mm:ss '),
-                        state: order.state
-                    })
-                })
+                   this.prepareData()
                }, 1000)
            }
            else {
-                ordersList = this.ordersInfo
-                ordersList.forEach((order) => {
-                    this.orders.push({
-                        _id: order._id,
-                        estimation_time: moment(order.estimation_time).format('HH:mm:ss '),
-                        state: order.state
-                    })
-                })
+                this.prepareData()
            }
 
             var channel = this.$pusher.subscribe('order');
@@ -70,16 +84,11 @@
                 console.log(`new order`);
                 if(this.userInfo.role_id === 3 || this.userInfo.role_id === 2)await this.fetchOrders(this.userInfo.account_id) //client ou restaurateur
                 else if(this.userInfo.role_id === 4)await this.fetchOrders()//livreur
-                ordersList = this.ordersInfo
-                this.orders = []
-                ordersList.forEach((order) => {
-                this.orders.push({
-                    _id: order._id,
-                    estimation_time: moment(order.estimation_time).format('HH:mm:ss '),
-                    state: order.state
-                    })
-                })
+                this.prepareData()
             });
+      },
+      updated () {
+          console.log('updated')
       },
       computed: mapState([
         // map this.count to store.state.count
@@ -94,16 +103,64 @@
         ...mapActions([
           'fetchOrders'
         ]),
-        async updateOrder(e, order_id){
-            console.log(e.target.value)
-            console.log(order_id)
+        async updateOrder(e, order_id, i){
+            console.log(e)
+            if(e.target.value === 'Terminé'){
+                if(!confirm("Etes vous sur de vouloir terminer la livraison ?")){
+                    e.target.value = this.orders[i].state
+                    return false
+                }
+            }
+            console.log('true')
+            this.orders[i].state = e.target.value
             const body = {
                 state: e.target.value
             }
             const apiService = new ApiService()
             let apiURL = 'update-order/' + order_id;
-            await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)))
-        }
+            let authToken = localStorage.getItem('AUTH_TOKEN')
+            await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)), authToken)
+            await this.fetchOrders()
+        },
+        prepareData(){
+            let ordersList = this.ordersInfo
+            console.log(ordersList)
+            ordersList.forEach((order) => {
+                console.log(order.estimation_time)
+                if(this.userInfo.role_name === 'livreur'){
+                    if(order.livreur_id === this.userInfo.account_id.toString() && order.state !== 'Recherche de livreur'){
+                        this.orders.push({
+                            _id: order._id,
+                            estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                            state: order.state,
+                            items: order.order_item
+                        })
+                    }
+                } else if(this.userInfo.role_name === 'client' && order.client_id === this.userInfo.account_id.toString()){
+                    this.orders.push({
+                            _id: order._id,
+                            estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                            state: order.state,
+                            items: order.order_item
+                        })
+                } else if(this.userInfo.role_name === 'restaurateur' && order.restaurant_id === this.userInfo.account_id.toString()){
+                    console.log(order.order_item)
+                    this.orders.push({
+                            _id: order._id,
+                            estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                            state: order.state,
+                            items: order.order_item
+                        })
+                } else if(this.userInfo.role_name === 'commercial'){
+                    this.orders.push({
+                        _id: order._id,
+                        estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                        state: order.state,
+                        items: order.order_item
+                    })
+                }
+            })
+        }  
     }
   })  
 </script>

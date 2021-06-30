@@ -35,6 +35,34 @@ db.createCollection( "restaurant",
       }
    }
 );
+// Create Collections
+db.createCollection("adminInfo",
+   {
+     capped: false,
+     autoIndexId: true,
+     validator: {
+       $jsonSchema : {
+         bsonType : ["object"],
+         title : "adminInfo",
+         description : "adminInfo collection",
+         properties : {
+           _id : {
+             bsonType : ["objectId"]
+           },
+           type : {
+             bsonType : ["string"]
+           },
+           value : {
+             bsonType : ["string"]
+           },
+           date : {
+             bsonType : ["string"]
+           },
+         }
+       }
+      }
+   }
+);
 
 db.createCollection( "product",
    {

@@ -10,6 +10,8 @@ import orderAPI from './routes/order.route'
 import productAPI from './routes/product.route'
 import userAPI from './routes/user.route'
 import roleAPI from './routes/roles.route'
+import adminAPI from './routes/admin.route'
+
 import createError from 'http-errors'
 
 
@@ -47,7 +49,7 @@ app.use('/api', orderAPI)
 app.use('/api', productAPI)
 app.use('/api', userAPI)
 app.use('/api', roleAPI)
-
+app.use('/api', adminAPI)
 
 // Health route for load balancing
 app.get(HEALTH_PATH, (req, res) => {
@@ -72,4 +74,4 @@ app.use( (err: any, req: any, res: any, next: any) => {
   res.status(err.statusCode).send(err.message);
 });
 
-LoadBalancerRegistration()
+//LoadBalancerRegistration()

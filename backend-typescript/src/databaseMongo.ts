@@ -1,5 +1,5 @@
 import {environment} from './environment'
 
 export default {
-   db: 'mongodb://'+environment.mongodbHost+':27017/OrderEATMDB'
+   db: 'mongodb://'+environment.mongodbHost+':27017/ordereat'
 }

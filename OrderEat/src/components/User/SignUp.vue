@@ -75,7 +75,7 @@
                 'updateUserInfo'
             ]),
             handleSubmitForm() {
-                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-user';
+                let apiURL = "http://localhost:4000/api/create-user";//'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+
                 const formData = new FormData();
                 formData.append('data', JSON.stringify(this.user))
                 if(this.picture_profil !== '')formData.append('file', this.picture_profil, this.picture_profil.name);
@@ -89,6 +89,9 @@
                     localStorage.setItem('AUTH_TOKEN', res.data.token)
                     let apiURL = 'check-user';
                     let _res = await apiService.getCall(apiURL, res.data.token, true)
+                    //Save connexion log
+                    apiURL = 'create-connexion-log'
+                    await apiService.postCall(apiURL, {action : 'Connexion account_id : ' + _res.account_id.toString()}, res.data.token)
                     this.updateUserInfo(_res)
                     this.toggleIsLoggedIn(true)
                     this.$router.push('/')

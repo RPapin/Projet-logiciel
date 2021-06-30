@@ -63,6 +63,8 @@
                     this.toggleIsLoggedIn(true)
                     localStorage.setItem('AUTH_TOKEN', res.token)
                     this.updateUserInfo(res)
+                    apiURL = 'create-connexion-log'
+                    await apiService.postCall(apiURL, {action : 'Connexion account_id : ' + res.account_id.toString()}, res.token)
                     this.$router.push('/')
                 }
                 //

@@ -45,7 +45,11 @@ const store = new Vuex.Store({
     }
   },
   actions : {
-    logout ({commit}) {
+    async logout ({commit}) {
+      let apiService = new ApiService()
+      let apiURL = 'create-connexion-log'
+      let token = localStorage.getItem('AUTH_TOKEN')
+      await apiService.postCall(apiURL, {action : 'Deconnexion accont_id : ' + this.state.userInfo.account_id}, token)
       localStorage.setItem('AUTH_TOKEN', undefined)
       commit('updateUserInfo', {})
       commit('toggleIsLoggedIn', false)
@@ -78,7 +82,6 @@ const store = new Vuex.Store({
         let apiURL = account_id === null ?'get-all-order' : 'get-order-by-id/' + account_id;
         let res = await apiService.getCall(apiURL, auth_token, true)
         commit('updateOrdersInfo', res)
-        console.log(this.state.ordersInfo)
       }
     }
   }
