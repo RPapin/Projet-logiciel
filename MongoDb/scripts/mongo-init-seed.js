@@ -1,7 +1,6 @@
 // Insert Datas
 db.restaurant.insertMany([
   {
-    "_id": 0,
     "manager_id" : "0",
     "address" : "Centre Cial Ecully Grand Ouest, 69130 Écully",
     "name" : "Restaurant Pizzeria d'Ecully",
@@ -10,7 +9,6 @@ db.restaurant.insertMany([
     "picture" : ""
   },
   {
-    "_id": 1,
     "manager_id" : "0",
     "address" : "10 Route du Perollier, 69570 Dardilly",
     "name" : "Les marches",
@@ -19,7 +17,6 @@ db.restaurant.insertMany([
     "picture" : ""
   },
   {
-    "_id": 2,
     "manager_id" : "0",
     "address" : "7 Place de l'Église, 69570 Dardilly",
     "name" : "L'Auberge du Village",
@@ -30,8 +27,7 @@ db.restaurant.insertMany([
 ]);
 
 db.product.insert({
-  "_id": 0,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "food",
   "name" : "Pizza Reine",
   "description" : "Une pizza delicieuse",
@@ -41,8 +37,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 1,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "food",
   "name" : "Pizza Carnivore",
   "description" : "Une pizza delicieuse",
@@ -52,8 +47,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 2,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "food",
   "name" : "Pizza Hawaïenne",
   "description" : "Une pizza delicieuse",
@@ -63,8 +57,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 3,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "food",
   "name" : "Pizza Norvegienne",
   "description" : "Une pizza delicieuse",
@@ -74,8 +67,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 4,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "drink",
   "name" : "Coca-Cola",
   "description" : "Une boisson delicieuse",
@@ -85,8 +77,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 5,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "type" : "sauce",
   "name" : "Sauce piquante",
   "description" : "Une sauce delicieuse",
@@ -96,10 +87,9 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 6,
-  "restaurant_id" : 1,
+  "restaurant_id" : db.restaurant.findOne({name: "Les marches"}),
   "type" : "drink",
-  "name" : "Coca-Cola",
+  "name" : "Nuka-Cola",
   "description" : "Une boisson delicieuse",
   "price" : 2.00,
   "estimation_time" : 0,
@@ -107,8 +97,7 @@ db.product.insert({
 });
 
 db.product.insert({
-  "_id": 7,
-  "restaurant_id" : 2,
+  "restaurant_id" : db.restaurant.findOne({name: "L'Auberge du Village"}),
   "type" : "drink",
   "name" : "Pepsi-Cola",
   "description" : "Une boisson delicieuse",
@@ -118,8 +107,7 @@ db.product.insert({
 });
 
 db.menu.insert({
-  "_id": 0,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "name" : "Menu Pizza Reine",
   "description" : "Un menu delicieux",
   "price" : 11.50,
@@ -127,23 +115,22 @@ db.menu.insert({
   "picture" : "",
   "menu_composition" : [
     {
-      "product_id" : 0,
+      "product_id" : db.product.findOne({name: "Pizza Reine"}),
       "quantity" : 1
     },
     {
-      "product_id" : 4,
+      "product_id" : db.product.findOne({name: "Coca-Cola"}),
       "quantity" : 1
     },
     {
-      "product_id" : 5,
+      "product_id" : db.product.findOne({name: "Sauce piquante"}),
       "quantity" : 4
     }
   ]
 });
 
 db.menu.insert({
-  "_id": 1,
-  "restaurant_id" : 0,
+  "restaurant_id" : db.restaurant.findOne({name: "Restaurant Pizzeria d'Ecully"}),
   "name" : "Menu Norvegien",
   "description" : "Un menu delicieux",
   "price" : 11.50,
@@ -151,15 +138,15 @@ db.menu.insert({
   "picture" : "",
   "menu_composition" : [
     {
-      "product_id" : 3,
+      "product_id" : db.product.findOne({name: "Pizza Norvegienne"}),
       "quantity" : 1
     },
     {
-      "product_id" : 4,
+      "product_id" : db.product.findOne({name: "Coca-Cola"}),
       "quantity" : 1
     },
     {
-      "product_id" : 5,
+      "product_id" : db.product.findOne({name: "Sauce piquante"}),
       "quantity" : 4
     }
   ]
