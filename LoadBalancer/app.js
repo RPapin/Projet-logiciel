@@ -38,10 +38,15 @@ const handlerPOST = async (req, res) => {
     try {
         // Higher health mean lowest performance
         const targetServer = getTargetServer()
+        authorization=""
+        if(req.headers.authorization !== undefined)
+        {
+            authorization = req.headers.authorization
+        }
 
         let config = {
           headers: {
-              authorization: req.headers.authorization
+              authorization: authorization
           }
         }
 
