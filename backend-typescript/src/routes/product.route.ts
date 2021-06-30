@@ -6,12 +6,10 @@ const productRoute = express.Router();
 
 
 productRoute.route('/get-all-product').get(authenticateToken, (req: any, res, next) => {
-    console.log('get-all-produc')
     ProductModel.find((error, data) => {
       if (error) {
         return next(error)
       } else {
-        console.log(data)
         res.json({
           products : data,
           refreshToken : req.refreshToken

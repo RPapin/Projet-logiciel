@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 //description: String,
 const productSchema = new Schema({
-  restaurant_id: Number,
+  restaurant_id: String,
   type: String,
   name: String,
   price: Number,
