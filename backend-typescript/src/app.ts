@@ -3,6 +3,7 @@ import fileUpload  from 'express-fileupload'
 import {LoadBalancerRegistration, healthCompute} from './loadbalancer'
 import {environment} from './environment'
 import cors from 'cors'
+import os from 'os'
 import mongoose from 'mongoose'
 import database from './databaseMongo'
 import bodyParser from  'body-parser'
@@ -11,6 +12,7 @@ import productAPI from './routes/product.route'
 import userAPI from './routes/user.route'
 import roleAPI from './routes/roles.route'
 import adminAPI from './routes/admin.route'
+import AdminModel from './models/Admin'
 
 import restaurantAPI from './routes/restaurant.route'
 import menuAPI from './routes/menu.route'
@@ -79,3 +81,22 @@ app.use( (err: any, req: any, res: any, next: any) => {
 });
 
 LoadBalancerRegistration()
+
+setInterval( () => {
+  let usedMemory:number = os.totalmem()-os.freemem()
+  let date:number = Date.now()
+
+  const admin:{ type: string; value: string; date: number } = {
+    type: "server",
+    value: usedMemory.toString(),
+    date: date
+  }
+
+  AdminModel.create(admin, (error, data) => {
+    if (error) {
+      console.log("[ERROR] Failed to store memory usage : "+error)
+      console.log(JSON.stringify(admin))
+    }
+  })
+
+}, 5000);

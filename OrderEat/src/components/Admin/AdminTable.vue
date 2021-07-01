@@ -25,7 +25,10 @@
             </table>
         </div>
         <div class="col-md-6">
-            <h3>performance des serveurs</h3>
+            <h3>Performance des serveurs (RAM)</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 200 100" style="border:solid 1px;">
+                <path :d="svgPathString" style="fill:none; stroke:#26de81; stroke-width:1px;"/>
+            </svg>
         </div>
       </div>
   </div>
@@ -41,7 +44,9 @@
       data() {
         return {
             connexionLog: [],
-            nbConnexion: 0
+            nbConnexion: 0,
+            serverMemoryPerformances: [],
+            svgPathString: ""
         }
       },
       async created() {
@@ -61,15 +66,32 @@
         //   if(this.userInfo.role_id === 3 || this.userInfo.role_id === 2)this.fetchOrders(this.userInfo.account_id) //client ou restaurateur
         //   else if(this.userInfo.role_id === 4)this.fetchOrders()//livreur
         // });
+
+
+        // Server performance
+        let resServPerf = await apiService.getCall('/get-server-usage-log', authToken)
+        this.serverMemoryPerformances = resServPerf.data
+
+        setInterval(async function(){
+            let resServPerf = await apiService.getCall('/get-server-usage-log', authToken)
+            this.serverMemoryPerformances = resServPerf.data
+        }.bind(this), 5000)
         
       },
-      computed: mapState([
-        // map this.count to store.state.count
-        'isLoggedIn',
-        'userInfo',
-        'clientCart',
-        'ordersInfo'
-      ]),
+      computed: {
+        ...mapState([
+            // map this.count to store.state.count
+            'isLoggedIn',
+            'userInfo',
+            'clientCart',
+            'ordersInfo'
+          ])
+      },
+      watch: {
+        serverMemoryPerformances: function(){
+            this.computeServerMemoryPerformancesPath()
+        }
+      },
       methods: {
         ...mapMutations([
           'toggleIsLoggedIn', // map `this.toggleIsLoggedIn()` to `this.$store.commit('toggleIsLoggedIn')`
@@ -87,6 +109,36 @@
             await apiService.getCall(apiURL, authToken)
             this.connexionLog.splice(i, 1) 
         },
+        computeServerMemoryPerformancesPath(){
+            let width = 200
+            let height = 100
+            let maxValue = 8000000000
+            let pathString:string = ""
+
+            if(this.serverMemoryPerformances !== undefined && this.serverMemoryPerformances.length > 0)
+            {
+                let minDate = this.serverMemoryPerformances[this.serverMemoryPerformances.length-1].date
+                let dateInterval = this.serverMemoryPerformances[0].date-minDate
+
+                for (var i = this.serverMemoryPerformances.length - 1; i >= 0; i--) {
+                    let tempString = ""
+                    if(i == this.serverMemoryPerformances.length - 1)
+                    {
+                        tempString += "M"
+                    }
+                    else
+                    {
+                        tempString += "L"
+                    }
+
+                    tempString += (((this.serverMemoryPerformances[i].date-minDate)/dateInterval)*width).toString()
+                    tempString += " "+(height-((parseInt(this.serverMemoryPerformances[i].value)/maxValue)*height)).toString()
+                    pathString += " "+tempString
+                }
+            }
+
+            this.svgPathString = pathString
+        }
     }
   })  
 </script>
