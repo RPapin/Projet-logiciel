@@ -151,3 +151,9 @@ db.menu.insert({
     }
   ]
 });
+
+db.adminInfo.insert({
+  "type" : "init",
+  "value" : "init db schema data",
+  "date" : 0
+});
