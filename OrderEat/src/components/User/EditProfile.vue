@@ -6,7 +6,7 @@
             
         </div>
         <div class="col-md-4">
-            <h3 class="text-center">Creer un compte</h3>
+            <h3 class="text-center">Editer mon compte</h3>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Nom</label>
@@ -53,6 +53,7 @@
         data() {
             return {
                 user: {
+                    account_id: "",
                     last_name : "",
                     first_name : "",
                     password : "",
@@ -70,7 +71,8 @@
                 let apiURL = 'edit-user';
                 let authToken = localStorage.getItem('AUTH_TOKEN')
                 await service.postCall(apiURL, this.user, authToken);
-                this.$router.push('/')
+                if(this.$route.params.id !== undefined)this.$router.push('/account-table')
+                else this.$router.push('/viewProduct')
             },
             async deleteAccount(){
                 const service = new ApiService()
@@ -95,8 +97,18 @@
             'userInfo'
             ]),
         async created() {
-            await this.checkUser()
-            this.user = this.userInfo 
+            if(this.$route.params.id !== undefined){
+                const service = new ApiService()
+                let apiURL = 'get-user-by-id/' + this.$route.params.id;
+                console.log(apiURL)
+                let authToken = localStorage.getItem('AUTH_TOKEN')
+                let res = await service.getCall(apiURL, authToken);
+                this.user = res
+            } else {
+                await this.checkUser()
+                this.user = this.userInfo 
+            }
+            
         }
     })
 </script>

@@ -25,6 +25,10 @@
           </li>
           <li class="nav-item">
             <router-link v-if="this.seeAdmin.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-table">Tableau d'Administration</router-link>
+            <router-link v-if="this.seeAdminCommercial.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-commercial">Tableau d'Administration</router-link>
+          </li>
+          <li v-if="this.seeAdminCommercial.includes(this.userInfo.role_name)" class="nav-item">
+            <router-link class="nav-link pr-3" to="account-table">Gestion des comptes</router-link>
           </li>
           <li v-if="this.isLoggedIn" class="nav-item">
             <router-link class="nav-link pr-3" to="edit-profile">Editer mon profile</router-link>
@@ -60,6 +64,7 @@
           seeTakeOrder : ['livreur'],
           seeOrder : ['admin', 'restaurateur', 'client', 'livreur', 'commercial'],
           seeAdmin : ['technique'],
+          seeAdminCommercial : ['commercial'],
           takeOrderInfo : []
         }
       },
