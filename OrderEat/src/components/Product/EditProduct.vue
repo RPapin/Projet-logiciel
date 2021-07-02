@@ -25,13 +25,13 @@
 
                 <div class="form-group">
                     <label>Temps de préparation estimé (min)</label>
-                    <input type="number" min="0" max="60" step="1" class="form-control" v-model="menu.estimation_time" required>
+                    <input type="number" min="0" max="60" step="1" class="form-control" v-model="product.estimation_time" required>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label>Image</label>      
-                     <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
-                </div>
+                     <input type="file" class="form-control" accept="image/*" @change="handleImages($event)">
+                </div>-->
 
                 <div class="form-group">
                     <button class="btn btn-danger btn-block">Editer</button>
@@ -42,8 +42,9 @@
 </template>
 
 <script lang="ts">
-    import axios from "axios";
+    import ApiService from "../../services/apiService"
     import Vue from 'vue';
+    import { mapState  } from 'vuex'
 
     export default Vue.extend({
 
@@ -59,26 +60,28 @@
             }
         },
         methods: {
-            handleSubmitForm() {
-                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-product';
-                
-                axios.post(apiURL, this.product).then(() => {
-                  this.$router.push('/viewProduct')
-                  this.product = {
-                    name: '',
-                    price: '',
-                    image: '',
-                    description: ''
-                  }
-                }).catch(error => {
-                    console.log(error)
-                });
+            async handleSubmitForm() {
+                const service = new ApiService()
+                let authToken:string = localStorage.getItem('AUTH_TOKEN')
+
+                this.product.manager_id = this.userInfo.account_id
+
+                await service.postCall('create-product', this.product, authToken)
+
+                this.$router.push({ name: 'home' })
             },
             handleImages(event:any){
                 this.product.image = event.target.files[0]
                 console.log(this.product)
             }
         },
+      computed: mapState([
+        // map this.count to store.state.count
+        'isLoggedIn',
+        'userInfo',
+        'clientCart',
+        'ordersInfo'
+      ]),
         components: {
         },
         created: function () {

@@ -1,6 +1,7 @@
 import express from 'express'
 import { NativeError, Document } from 'mongoose';
 import ProductModel from '../models/Product'
+import RestaurantModel from '../models/Restaurant'
 import {authenticateToken} from '../authJWT'
 const productRoute = express.Router();
 
@@ -19,12 +20,21 @@ productRoute.route('/get-all-product').get(authenticateToken, (req: any, res, ne
 
 
 
- productRoute.route('/create-product').post((req, res, next) => {
-    ProductModel.create(req.body, (error, data) => {
+productRoute.route('/create-product').post((req, res, next) => {
+   RestaurantModel.findOne({
+     manager_id : req.body.manager_id.toString()
+   }, (error: NativeError, data: Document<any, any>) => {
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      req.body.restaurant_id = data._id
+      ProductModel.create(req.body, (error, data) => {
+        if (error) {
+          return next(error)
+        } else {
+          res.json(data)
+        }
+      })
     }
   })
 });
