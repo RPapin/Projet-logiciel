@@ -53,7 +53,7 @@
             let res = await apiService.getCall(apiURL, authToken)
             console.log(res)
             this.clientAccount = res
-          }, 1000)
+          }, 100)
 
         //event listener => new order
         // var channel = this.$pusher.subscribe('order');

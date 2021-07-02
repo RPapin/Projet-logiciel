@@ -1,6 +1,7 @@
 import express from 'express'
 import { NativeError, Document } from 'mongoose';
 import OrderModel from '../models/Order'
+import RestaurantModel from '../models/Restaurant'
 import {authenticateToken} from '../authJWT'
 import pusher from '../pusher.config'
 const orderRoute = express.Router();
@@ -17,40 +18,51 @@ orderRoute.route('/get-all-order').get(authenticateToken, (req, res, next) => {
     })
   });
 
- orderRoute.route('/create-order').post(authenticateToken, (req, res, next) => {
+ orderRoute.route('/create-order').post(authenticateToken, async (req, res, next) => {
   let order_item:any[] = []
+  let manager_id:any = []
   let estimatedTime:number = Date.now()
-
-  req.body.products.forEach((product:any) => {
-    order_item.push({
-      item_id: product._id,
-      item_name: product.name,
-      quantity: product.quantity
-    })
-
-    estimatedTime += (product.estimation_time * product.quantity * 60000)
-  });
-  console.log(req.body.products[0])
-  //req.body.products[0].restaurant_id,
-   const order = {
-    restaurant_id: "81",
-    client_id: req.body.account_id,
-    livreur_id: "",
-    order_item: order_item,
-    state: 'Recherche de livreur',
-    estimation_time: estimatedTime
-   }
-   
-    OrderModel.create(order, (error, data) => {
+  RestaurantModel.find({_id: req.body.products[0].restaurant_id}).exec((error, _data) => {
     if (error) {
       return next(error)
     } else {
-      pusher.trigger("order", "new-order", {
-        order: data
+      req.body.products.forEach((product:any) => {
+        order_item.push({
+          item_id: product._id,
+          item_name: product.name,
+          item_type: product.item_type,
+          quantity: product.quantity
+        })
+    
+        estimatedTime += (product.estimation_time * product.quantity * 60000)
       });
-      res.json(data)
+      manager_id = _data
+      
+      //req.body.products[0].restaurant_id,
+       const order = {
+        restaurant_id: req.body.products[0].restaurant_id,
+        manager_id: parseInt(manager_id[0].manager_id),
+        client_id: req.body.account_id,
+        livreur_id: "",
+        order_item: order_item,
+        state: 'Recherche de livreur',
+        estimation_time: estimatedTime
+       }
+       console.log(order)
+        OrderModel.create(order, (error, data) => {
+        if (error) {
+          console.log(error)
+          return next(error)
+        } else {
+          pusher.trigger("order", "new-order", {
+            order: data
+          });
+          res.json(data)
+        }
+      })
     }
   })
+  
 });
 
 orderRoute.route('/get-order-by-id/:id').get(authenticateToken, (req, res, next) => {

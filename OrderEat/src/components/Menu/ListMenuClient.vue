@@ -20,9 +20,10 @@
                                 v-model="menu['quantity']"
                             />
                     </div>
-                    <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart({newCart:CurrentRestaurantMenus, isProduct:false})">Ajouter au panier</button></div>
+                    
                 </div>
             </div>
+            <div class="col-md-2 offset-md-10"><button class="btn btn-danger btn-block" v-on:click="updateCart({newCart:CurrentRestaurantMenus, isProduct:false})">Ajouter au panier</button></div>
         </div>
     </div>
 </template>

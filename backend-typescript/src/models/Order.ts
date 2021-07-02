@@ -6,7 +6,10 @@ const orderSchema = new Schema({
     type: Schema.Types.ObjectId
   },
   client_id: {
-    type: String
+    type: Number
+  },
+  manager_id : {
+    type: Number
   },
   livreur_id: {
     type: String

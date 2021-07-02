@@ -37,7 +37,6 @@ const store = new Vuex.Store({
     updateCart(state, {newCart, isProduct}){
       let indexToRemove = []
       newCart.forEach((element) => {
-        console.log(element.quantity)
         if(element.quantity === 0)
         {
           indexToRemove.push(element._id)
@@ -52,6 +51,9 @@ const store = new Vuex.Store({
         }
       });
       state.clientCart = state.clientCart.filter( ( el ) => !indexToRemove.includes( el._id ) );
+    },
+    removeCart(state){
+      state.clientCart = []
     }
   },
   actions : {

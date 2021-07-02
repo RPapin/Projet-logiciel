@@ -15,17 +15,18 @@
             <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/viewProduct">Voir les produits</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="this.seeCart.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/cart" >Voir mon panier<span v-if="this.clientCart.length !== 0" class="notif">{{this.clientCart.length}}</span></router-link>
+            <router-link v-if="this.seeCart.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/cart" >Voir mon panier</router-link>
           </li>
           <li class="nav-item">
-            <router-link  v-if="this.seeTakeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/take-order" >Prendre une livraison<span v-if="this.takeOrderInfo.length !== 0" class="notif">{{this.takeOrderInfo.length}}</span></router-link>
+            <router-link  v-if="this.seeTakeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/take-order" >Prendre une livraison</router-link>
           </li>
            <li class="nav-item">
-            <router-link  v-if="this.seeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/follow-orders" >Suivre les commandes<span v-if="this.ordersInfo.length !== 0" class="notif">{{this.ordersInfo.length}}</span></router-link>
+            <router-link  v-if="this.seeOrder.includes(this.userInfo.role_name)" class="nav-link pr-3 notif-container" to="/follow-orders" >Suivre les commandes</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="this.seeAdmin.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-table">Tableau d'Administration</router-link>
-            <router-link v-if="this.seeAdminCommercial.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-commercial">Tableau d'Administration</router-link>
+            <router-link v-if="this.seeAdmin.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-table">Tableau d'Administration technique</router-link>
+            <router-link v-if="this.seeAdminCommercial.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-commercial">Tableau d'Administration commercial</router-link>
+            <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/admin-commercial">Statistiques des menus</router-link>
           </li>
           <li v-if="this.seeAdminCommercial.includes(this.userInfo.role_name)" class="nav-item">
             <router-link class="nav-link pr-3" to="account-table">Gestion des comptes</router-link>
@@ -48,7 +49,10 @@
       <router-view></router-view>
     </div>
   </div>
+  <!-- <span v-if="this.clientCart.length !== 0" class="notif">{{this.clientCart.length}}</span> -->
 </template>
+
+
 <script lang="ts">
   import Vue from 'vue';
 
@@ -65,20 +69,30 @@
           seeOrder : ['admin', 'restaurateur', 'client', 'livreur', 'commercial'],
           seeAdmin : ['technique'],
           seeAdminCommercial : ['commercial'],
-          takeOrderInfo : []
+          takeOrderInfo : [],
+          reaload: false
         }
       },
       async created() {
+        // if(this.userInfo.role_id === 3 )await this.fetchOrders(this.userInfo.account_id) //client 
+        // else if(this.userInfo.role_id === 4 || this.userInfo.role_id === 2 || this.userInfo.role_id === 5){
+        //   await this.fetchOrders()//livreur ou restaurateur ou service commerciale
+        //   this.ordersInfo.forEach(order => {
+        //     if(order.state === "Recherche de livreur"){
+        //       this.takeOrderInfo.push(order)
+        //     }
+        //   });
+        //}
         await this.checkUser()
-        if(this.userInfo.role_id === 3 )await this.fetchOrders(this.userInfo.account_id) //client 
-        else if(this.userInfo.role_id === 4 || this.userInfo.role_id === 2 || this.userInfo.role_id === 5){
-          await this.fetchOrders()//livreur ou restaurateur ou service commerciale
-          this.ordersInfo.forEach(order => {
-            if(order.state === "Recherche de livreur"){
-              this.takeOrderInfo.push(order)
-            }
-          });
-        }
+        this.$store.subscribe(async () => {
+          console.log(this.userInfo.role_name)
+
+          if (this.reaload !== true || (this.userInfo.role_name === undefined && this.isLoggedIn === true)) {  // Whatever your action is called 
+            this.reaload = true
+            await this.checkUser()
+            
+          }
+        });
         //event listener => new order
         // var channel = this.$pusher.subscribe('order');
         // channel.bind("new-order", () => {

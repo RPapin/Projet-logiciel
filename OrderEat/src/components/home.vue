@@ -2,7 +2,7 @@
   <div>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h3 class="text-center">Bienvenue sur OrderEat<span v-if="this.userInfo.first_name !== undefined">, {{this.userInfo.first_name}} {{this.userInfo.last_name}}</span></h3>
+            <Banner><h3 class="text-center">Bienvenue sur OrderEat<span v-if="this.userInfo.first_name !== undefined">, {{this.userInfo.first_name}} {{this.userInfo.last_name}}</span></h3></Banner>
         </div>
     </div>
   </div>
@@ -10,6 +10,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import ApiService from "../services/apiService"
+  import Banner from '@ordereat/banner'
   import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default Vue.extend({
@@ -39,6 +40,9 @@ export default Vue.extend({
         ...mapActions([
           'checkUser',
         ])
-    }
+    },
+     components : {
+       ...Banner
+     }
   })  
 </script>

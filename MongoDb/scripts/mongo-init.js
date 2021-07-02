@@ -56,7 +56,7 @@ db.createCollection("adminInfo",
              bsonType : ["string"]
            },
            date : {
-             bsonType : ["string"]
+             bsonType : ["int"]
            },
          }
        }

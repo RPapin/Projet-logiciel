@@ -3,7 +3,7 @@ import Vue from 'vue';
 import router from '../router';
 
 export default class apiService extends Vue{
-    baseUrl: string = "http://localhost:8084/api/"
+    baseUrl: string = "http://localhost:4000/api/"
     constructor() {
         super();
     }

@@ -28,11 +28,12 @@
                                 <option value='Recherche de livreur' disabled>Recherche de livreur</option>
                                 <option value="En preparation">En preparation</option>
                                 <option value="En attente du livreur">En attente du livreur</option>
+                                <option value="Terminé" disabled>Terminé</option>
                             </select>
                         </td>
                         <!-- COMMERCIAL -->
                         <td v-else-if="userInfo.role_id === 5" > 
-                            <select type="text" class="form-control"   :value="order.state"  disabled>
+                            <select type="text" class="form-control"   :value="order.state" @change="(e) => updateOrder(e, order._id, i)">
                                 <option value='Recherche de livreur'>Recherche de livreur</option>
                                 <option value="En preparation">En preparation</option>
                                 <option value="En attente du livreur" >En attente du livreur</option>
@@ -65,14 +66,15 @@
             reload: false,
             seeLivreurSelect : ['Terminé', "En preparation"],
             seeRestoSelect : ['Terminé', "En attente du livreur", "livraison en cours", 'Recherche de livreur'],
+
         }
       },
        async created() {
            console.log('created')
            if(!this.ordersInfo[0]){
-               await setTimeout(() => {
-                   this.prepareData()
-               }, 1000)
+               await setTimeout(async () => {
+                   await this.prepareData()
+               }, 100)
            }
            else {
                 this.prepareData()
@@ -81,10 +83,7 @@
             var channel = this.$pusher.subscribe('order');
             //event listener => new order
             channel.bind("new-order", async () => {
-                console.log(`new order`);
-                if(this.userInfo.role_id === 3 || this.userInfo.role_id === 2)await this.fetchOrders(this.userInfo.account_id) //client ou restaurateur
-                else if(this.userInfo.role_id === 4)await this.fetchOrders()//livreur
-                this.prepareData()
+                await this.prepareData()
             });
       },
       updated () {
@@ -122,13 +121,41 @@
             await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)), authToken)
             await this.fetchOrders()
         },
-        prepareData(){
-            let ordersList = this.ordersInfo
-            console.log(ordersList)
-            ordersList.forEach((order) => {
-                console.log(order.estimation_time)
-                if(this.userInfo.role_name === 'livreur'){
-                    if(order.livreur_id === this.userInfo.account_id.toString() && order.state !== 'Recherche de livreur'){
+        async prepareData(){
+            if(this.reload === false){
+                this.reload = true
+                await this.fetchOrders()
+                let ordersList = this.ordersInfo
+                console.log(ordersList)
+                ordersList.forEach((order) => {
+                    if(this.userInfo.role_name === 'livreur'){
+                        if(order.livreur_id === this.userInfo.account_id.toString() && order.state !== 'Recherche de livreur'){
+                            let result = this.orders.find(({ _id }) => _id === order._id )
+                            if(result === undefined){
+                                this.orders.push({
+                                    _id: order._id,
+                                    estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                                    state: order.state,
+                                    items: order.order_item
+                                })
+                            }
+                        }
+                    } else if(this.userInfo.role_name === 'client' && order.client_id === this.userInfo.account_id){
+                        this.orders.push({
+                                _id: order._id,
+                                estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                                state: order.state,
+                                items: order.order_item
+                            })
+                    } else if(this.userInfo.role_name === 'restaurateur' && order.manager_id === this.userInfo.account_id){
+                        console.log(order.order_item)
+                        this.orders.push({
+                                _id: order._id,
+                                estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
+                                state: order.state,
+                                items: order.order_item
+                            })
+                    } else if(this.userInfo.role_name === 'commercial'){
                         this.orders.push({
                             _id: order._id,
                             estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
@@ -136,31 +163,9 @@
                             items: order.order_item
                         })
                     }
-                } else if(this.userInfo.role_name === 'client' && order.client_id === this.userInfo.account_id.toString()){
-                    this.orders.push({
-                            _id: order._id,
-                            estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
-                            state: order.state,
-                            items: order.order_item
-                        })
-                } else if(this.userInfo.role_name === 'restaurateur' && order.restaurant_id === this.userInfo.account_id.toString()){
-                    console.log(order.order_item)
-                    this.orders.push({
-                            _id: order._id,
-                            estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
-                            state: order.state,
-                            items: order.order_item
-                        })
-                } else if(this.userInfo.role_name === 'commercial'){
-                    this.orders.push({
-                        _id: order._id,
-                        estimation_time: moment(order.estimation_time).format('HH:mm:ss'),
-                        state: order.state,
-                        items: order.order_item
-                    })
-                }
-            })
-        }  
+                })
+            }  
+        }
     }
   })  
 </script>
