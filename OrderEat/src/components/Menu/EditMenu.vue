@@ -18,10 +18,10 @@
                     <input type="number" min="0" max="60" step="1" class="form-control" v-model="menu.estimation_time" required>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label>Image</label>      
-                     <!-- <input type="file" class="form-control" accept="image/*" @change="handleImages($event)"> -->
-                </div>
+                     <input type="file" class="form-control" accept="image/*" @change="handleImages($event)">
+                </div>-->
 
                 <div class="form-group">
                     <label>Composition</label>
@@ -41,8 +41,9 @@
 </template>
 
 <script lang="ts">
-    import axios from "axios";
+    import ApiService from "../../services/apiService"
     import Vue from 'vue';
+    import { mapState  } from 'vuex'
 
     // [TODO] Load products for composition
 
@@ -61,20 +62,23 @@
             }
         },
         methods: {
-            handleSubmitForm() {
-                let apiURL = 'http://'+process.env.LOAD_BALANCER_HOST+':'+process.env.LOAD_BALANCER_PORT+'/api/create-menu';
-                
-                axios.post(apiURL, this.menu).then(() => {
-                  this.$router.push('/view')
-                  this.menu = {
-                    name: '',
-                    email: '',
-                    phone: ''
-                  }
-                }).catch(error => {
-                    console.log(error)
-                });
+            async handleSubmitForm() {
+                const service = new ApiService()
+                let authToken:string = localStorage.getItem('AUTH_TOKEN') 
+
+                this.menu.manager_id = this.userInfo.account_id
+
+                await service.postCall('menu', this.menu, authToken)
+
+                this.$router.push({ name: 'home' })
             }
-        }
+        },
+      computed: mapState([
+        // map this.count to store.state.count
+        'isLoggedIn',
+        'userInfo',
+        'clientCart',
+        'ordersInfo'
+      ])
     })
 </script>

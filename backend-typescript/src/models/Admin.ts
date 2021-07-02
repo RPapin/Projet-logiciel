@@ -2,15 +2,9 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
-type: {
-    type: String
-  },
-  value: {
-    type: String
-  },
-  date: {
-    type: Number
-  },
+  type: String,
+  value: String,
+  date: Number,
 }, {
   collection: 'adminInfo'
 })

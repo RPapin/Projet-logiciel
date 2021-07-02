@@ -30,9 +30,9 @@ adminRoute.route('/get-connexion-log').get(authenticateToken, (req, res, next) =
         })
       }
     })
-  });
+});
 
- adminRoute.route('/create-connexion-log').post((req, res, next) => {
+adminRoute.route('/create-connexion-log').post((req, res, next) => {
   let date:number = Date.now()
   //req.body.products[0].restaurant_id,
    const admin = {
@@ -135,5 +135,37 @@ adminRoute.route('/delete-admin/:id').get((req, res, next) => {
     }
   })
 })
+
+
+
+adminRoute.route('/create-server-usage-log').post((req, res, next) => {
+  let date:number = Date.now()
+
+  const admin = {
+    type: "server",
+    value: req.body.usedMemory,
+    date: date
+  }
+
+  AdminModel.create(admin, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+});
+
+adminRoute.route('/get-server-usage-log').get(authenticateToken, (req, res, next) => {
+  AdminModel.find({type: 'server'}).sort({date: 'desc'}).limit(24).exec( (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json({
+        data
+      })
+    }
+  })
+});
 
 export default adminRoute

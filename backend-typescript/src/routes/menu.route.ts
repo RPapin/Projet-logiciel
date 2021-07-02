@@ -1,6 +1,7 @@
 import express from 'express'
 import { NativeError, Document } from 'mongoose';
 import MenuModel from '../models/Menu'
+import RestaurantModel from '../models/Restaurant'
 import {authenticateToken} from '../authJWT'
 const menuRoute = express.Router();
 
@@ -18,11 +19,20 @@ menuRoute.route('/menus').get(authenticateToken, (req, res, next) => {
 })
 
 menuRoute.route('/menu').post((req, res, next) => {
-  MenuModel.create(req.body, (error, data) => {
+   RestaurantModel.findOne({
+     manager_id : req.body.manager_id.toString()
+   }, (error: NativeError, data: Document<any, any>) => {
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      req.body.restaurant_id = data._id
+      MenuModel.create(req.body, (error, data) => {
+        if (error) {
+          return next(error)
+        } else {
+          res.json(data)
+        }
+      })
     }
   })
 })

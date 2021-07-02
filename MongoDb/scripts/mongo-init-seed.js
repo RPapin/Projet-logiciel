@@ -1,7 +1,7 @@
 // Insert Datas
 db.restaurant.insertMany([
   {
-    "manager_id" : "0",
+    "manager_id" : "80",
     "address" : "Centre Cial Ecully Grand Ouest, 69130 Écully",
     "name" : "Restaurant Pizzeria d'Ecully",
     "description" : "",
@@ -9,7 +9,7 @@ db.restaurant.insertMany([
     "picture" : ""
   },
   {
-    "manager_id" : "0",
+    "manager_id" : "37",
     "address" : "10 Route du Perollier, 69570 Dardilly",
     "name" : "Les marches",
     "description" : "",
@@ -150,4 +150,10 @@ db.menu.insert({
       "quantity" : 4
     }
   ]
+});
+
+db.adminInfo.insert({
+  "type" : "init",
+  "value" : "init db schema data",
+  "date" : 0
 });

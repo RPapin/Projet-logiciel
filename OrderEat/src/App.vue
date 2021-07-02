@@ -6,10 +6,10 @@
         <router-link class="navbar-brand float-left" to="/"><img src="@/assets/logos/logo_black_transparent.png" class="imgNavbar"/></router-link>
         <ul class="nav navbar-nav flex-row float-right">
           <li class="nav-item">
-            <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un Menu</router-link>
+            <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editMenu/0">Creer un Menu</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
+            <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
           </li>
           <li class="nav-item">
             <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/viewProduct">Voir les produits</router-link>
