@@ -16,6 +16,14 @@ const TYPES = tedious.TYPES;
 interface RowResult {
     string: string;
   }
+
+/**
+ * @api {get} /get-client-account Return all client account
+ * @apiName User
+ * @apiGroup User
+ * * 
+ * @apiSuccess {Array} Return all client account.
+ */
   userRoute.route('/get-client-account').get(authenticateToken, (req, res, next) => {
     const sql = `SELECT * FROM Account WHERE role_id = 3;`;
     let result:any = [];
@@ -37,6 +45,14 @@ interface RowResult {
     });
     sqlConnector.execSql(request);
   })
+
+/**
+ * @api {get} /get-role-by-userId/:id Return the role of a specific user
+ * @apiName User
+ * @apiGroup User
+ * * 
+ * @apiSuccess {Array} Return the role of a specific user.
+ */
 userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     const request = new Request("SELECT r.role_name FROM Account as a LEFT JOIN Role as r ON a.role_id = r.role_id WHERE a.account_id = "+req.params.id+" ;", (err) => {
         if (err) {
@@ -57,6 +73,16 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     });
     sqlConnector.execSql(request);
  })
+
+/**
+ * @api {post} /create-user Create a new user in database
+ * @apiName User
+ * @apiGroup User
+ *
+ * @apiParam {Object} user object to be created.
+ * 
+ * @apiSuccess {Object} The newly created user.
+ */
  userRoute.route('/create-user').post((req: any, res, next) => {
     //We need 3 nested sql request so we are using callbacks
         
@@ -138,6 +164,14 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     }
 
  });
+
+/**
+ * @api {post} /login-user Log a user
+ * @apiName User
+ * @apiGroup User
+ *
+ * @apiParam {Object} The user that need to be connected.
+ */
  userRoute.route('/login-user').post((req: any, res, next) => {
      console.log('call to login')
     const body = req.body
@@ -173,6 +207,14 @@ userRoute.route('/get-role-by-userId/:id').get((req, res, next) => {
     });
     sqlConnector.execSql(request);
  });
+
+/**
+ * @api {get} /check-user Check if a user is connected
+ * @apiName User
+ * @apiGroup User
+ *
+ * @apiParam {Object} Success message.
+ */
 userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
     //FETCH AND SEND USER INFO
     const authHeader = req.headers.authorization
@@ -207,6 +249,16 @@ userRoute.route('/check-user').get(authenticateToken, (req: any, res, next) => {
     });
     sqlConnector.execSql(request);
 })
+
+/**
+ * @api {post} /edit-user Update a specific user
+ * @apiName User
+ * @apiGroup User
+ *
+ * @apiParam {Object} id The id of the specific user.
+ * 
+ * @apiSuccess {Object} The specific user.
+ */
 userRoute.route('/edit-user').post(authenticateToken, (req: any, res, next) => {
     const body = req.body 
     let profilePictureName = 'default-profile-picture.png'

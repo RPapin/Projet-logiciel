@@ -4,7 +4,13 @@ import sqlConnector from '../databaseSql'
 const Request = tedious.Request;
 const roleRoute = express.Router();
 
-
+/**
+ * @api {get} /get-roles Return all roles
+ * @apiName Role
+ * @apiGroup Role
+ * * 
+ * @apiSuccess {Array} Return all roles.
+ */
 roleRoute.route('/get-roles').get((req: any, res, next) => {
     const sql = `SELECT * FROM role;`;
     let result:any = [];

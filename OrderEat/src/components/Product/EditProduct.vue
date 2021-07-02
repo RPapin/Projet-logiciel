@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h3 class="text-center">Editer un Article</h3>
+            <h3 class="text-center">Créer un Article</h3>
             <form @submit.prevent="handleSubmitForm">
                 <div class="form-group">
                     <label>Type</label>

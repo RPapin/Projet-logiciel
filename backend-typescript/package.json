@@ -9,11 +9,12 @@
     "tsc": "tsc",
     "build": "npm-run-all clean lint tsc",
     "dev:start": "npm-run-all build start",
-    "dev": "nodemon --watch src -e ts,ejs --exec 'npm run dev:start'",
+    "dev": "nodemon -L src/app.ts",
     "start": "ts-node .",
     "devs": "nodemon --watch src -e ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start.dev": "nodemon -L src/app.ts"
+    "doc": "apidoc -i src/ -o src/apidoc/",
+    "start.dev": "npm-run-all doc dev"
   },
   "author": "",
   "license": "ISC",
@@ -36,7 +37,8 @@
     "pusher": "^5.0.0",
     "redis": "^2.8.0",
     "tedious": "^11.0.9",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "apidoc": "^0.28.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

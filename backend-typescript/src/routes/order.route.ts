@@ -6,6 +6,13 @@ import pusher from '../pusher.config'
 const orderRoute = express.Router();
 
 
+/**
+ * @api {get} /get-all-order Return all orders
+ * @apiName Order
+ * @apiGroup Order
+ * * 
+ * @apiSuccess {Array} Return all orders.
+ */
 orderRoute.route('/get-all-order').get(authenticateToken, (req, res, next) => {
   console.log('/get-all-order')
     OrderModel.find().sort({estimation_time: 'desc'}).exec( (error, data) => {
@@ -17,6 +24,15 @@ orderRoute.route('/get-all-order').get(authenticateToken, (req, res, next) => {
     })
   });
 
+/**
+ * @api {post} /create-order Create a new order in database
+ * @apiName Order
+ * @apiGroup Order
+ *
+ * @apiParam {Object} Order object to be created.
+ * 
+ * @apiSuccess {Object} The newly created order.
+ */
  orderRoute.route('/create-order').post(authenticateToken, (req, res, next) => {
   let order_item:any[] = []
   let estimatedTime:number = Date.now()
@@ -53,8 +69,17 @@ orderRoute.route('/get-all-order').get(authenticateToken, (req, res, next) => {
   })
 });
 
+/**
+ * @api {get} /get-order-by-id/:id Return a specific order
+ * @apiName Order
+ * @apiGroup Order
+ *
+ * @apiParam {Object} id The id of the specific order.
+ * 
+ * @apiSuccess {Object} The specific order.
+ */
 orderRoute.route('/get-order-by-id/:id').get(authenticateToken, (req, res, next) => {
-  console.log('et-order-by')
+  console.log('get-order-by')
    OrderModel.find({
      client_id : req.params.id
    }, (error: NativeError, data: Document<any, any>) => {
@@ -66,7 +91,15 @@ orderRoute.route('/get-order-by-id/:id').get(authenticateToken, (req, res, next)
   })
 })
 
-// Update order
+/**
+ * @api {post} /update-order/:id Update a specific order
+ * @apiName Order
+ * @apiGroup Order
+ *
+ * @apiParam {Object} id The id of the specific order.
+ * 
+ * @apiSuccess {Object} The specific order.
+ */
 orderRoute.route('/update-order/:id').post(authenticateToken, (req, res, next) => {
   OrderModel.findByIdAndUpdate(req.params.id, {
     $set: req.body
@@ -80,7 +113,16 @@ orderRoute.route('/update-order/:id').post(authenticateToken, (req, res, next) =
   })
 })
 
-// Delete order
+
+/**
+ * @api {delete} /delete-order/:id Delete a specific order
+ * @apiName Order
+ * @apiGroup Order
+ *
+ * @apiParam {Object} id The id of the specific order.
+ * 
+ * @apiSuccess {Object} Success message.
+ */
 orderRoute.route('/delete-order/:id').delete(authenticateToken, (req, res, next) => {
   OrderModel.findByIdAndRemove(req.params.id, undefined, (error: any, data: Document<any, any>) => {
     if (error) {
