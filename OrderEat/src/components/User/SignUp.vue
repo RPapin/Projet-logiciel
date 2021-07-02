@@ -94,7 +94,8 @@
                     await apiService.postCall(apiURL, {action : 'Connexion account_id : ' + _res.account_id.toString()}, res.data.token)
                     this.updateUserInfo(_res)
                     this.toggleIsLoggedIn(true)
-                    this.$router.push('/')
+                    if(_res.role_name !== 'client')this.$router.push('/')
+                    else this.$router.push('/viewProduct')
                 }).catch(error => {
                     console.log(error)
                 });

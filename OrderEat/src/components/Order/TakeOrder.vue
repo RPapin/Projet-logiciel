@@ -37,12 +37,12 @@
        async created() {
            console.log('created')
            if(!this.ordersInfo[0]){
-               await setTimeout(() => {
-                  this.prepareData()
+               await setTimeout(async () => {
+                  await this.prepareData()
                }, 1000)
            }
            else {
-                this.prepareData()
+                await this.prepareData()
            }
 
             var channel = this.$pusher.subscribe('order');
@@ -82,7 +82,8 @@
             await this.fetchOrders()
             this.orders.splice(i, 1) 
         },
-        prepareData(){
+        async prepareData(){
+            await this.fetchOrders()
             let ordersList = this.ordersInfo
             ordersList.forEach((order) => {
                 if(order.state === 'Recherche de livreur'){

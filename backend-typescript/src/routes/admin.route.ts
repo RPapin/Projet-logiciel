@@ -34,7 +34,6 @@ adminRoute.route('/get-connexion-log').get(authenticateToken, (req, res, next) =
 
 adminRoute.route('/create-connexion-log').post((req, res, next) => {
   let date:number = Date.now()
-  console.log(req.body)
   //req.body.products[0].restaurant_id,
    const admin = {
     type: "log",
@@ -78,13 +77,16 @@ adminRoute.route('/get-product-popularity').get(authenticateToken, (req, res, ne
     },{
     $group: {
       _id: "$order_item.item_id",
-      count: { $sum: 1 }
+      count: { $sum:  1 } 
     }
   }]
   OrderModel.aggregate(aggregatorOpts).sort({count: 'desc'}).exec((err, result) => {
     if (err) {
       return next(err)
     } else {
+      console.log(menu)
+      console.log(result)
+
       article = result
       res.json({
         menu,
@@ -93,26 +95,6 @@ adminRoute.route('/get-product-popularity').get(authenticateToken, (req, res, ne
     }
   })
 })
-// adminRoute.route('/get-client-account').get(authenticateToken, (req, res, next) => {
-//   const sql = `SELECT * FROM Account WHERE role_id = 3;`;
-//   let result:any = {};
-//   const request = new Request(sql, (err, rowCount) => {
-//       if (err) {
-//           console.error(err.message);
-//       } else {
-//         //User info has been found
-//         console.log(result)
-//         res.json(result)
-//       }
-//   });
-
-//   request.on('row', (columns) => {
-//       columns.forEach((column) => {
-//           result[column.metadata.colName] = column.value
-//       });
-//   });
-//   sqlConnector.execSql(request);
-// })
 
 adminRoute.route('/get-admin-by-id/:id').get((req, res, next) => {
   console.log('et-admin-by')

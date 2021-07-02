@@ -57,7 +57,7 @@ db.createCollection("adminInfo",
            },
            date : {
              bsonType : ["int"]
-           }
+           },
          }
        }
       }

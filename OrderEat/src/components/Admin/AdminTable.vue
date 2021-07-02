@@ -24,7 +24,27 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+
+          <div class="col-md-6">
+            <h3>Utilisation de nos components</h3>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Téléchargements</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ componentInfo.collected.metadata.name }}</td>
+                        <td > 
+                            {{ nbDownload }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-10">
             <h3>Performance des serveurs (RAM)</h3>
             <svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 200 100" style="border:solid 1px;">
                 <path :d="svgPathString" style="fill:none; stroke:#26de81; stroke-width:1px;"/>
@@ -40,11 +60,14 @@
   import { mapMutations, mapState, mapActions  } from 'vuex'
   import ApiService from "../../services/apiService"
   import moment from 'moment'
+  import axios from "axios";
   export default Vue.extend({
       data() {
         return {
             connexionLog: [],
             nbConnexion: 0,
+            componentInfo: [],
+            nbDownload: 0,
             serverMemoryPerformances: [],
             svgPathString: ""
         }
@@ -57,8 +80,19 @@
             res['data'].forEach(log => {
                 log.date = moment(log.date).format('DD/MM/YYYY HH:mm:ss') 
             });
+            let _res = await axios.get("https://api.npms.io/v2/package/%40ordereat%2Fbanner").then(res => {
+              return res.data
+            });
+            let _ress = await axios.get("https://api.npmjs.org/downloads/point/last-month/%40ordereat%2Fbanner").then(res => {
+              return res.data
+            });
+             console.log(_ress)
+            console.log(_res)
+
+            this.componentInfo = _res
             this.connexionLog = res['data']
             this.nbConnexion = res['totalLog']
+            this.nbDownload = _ress['downloads']
         //event listener => new order
         // var channel = this.$pusher.subscribe('order');
         // channel.bind("new-order", () => {

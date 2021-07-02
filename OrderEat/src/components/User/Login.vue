@@ -62,10 +62,11 @@
                     //save user info
                     this.toggleIsLoggedIn(true)
                     localStorage.setItem('AUTH_TOKEN', res.token)
-                    this.updateUserInfo(res)
+                    await this.updateUserInfo(res)
                     apiURL = 'create-connexion-log'
                     await apiService.postCall(apiURL, {action : 'Connexion account_id : ' + res.account_id.toString()}, res.token)
-                    this.$router.push('/')
+                    if(res.role_id !== 3)this.$router.push('/')
+                    else this.$router.push('/viewProduct')
                 }
                 //
             }

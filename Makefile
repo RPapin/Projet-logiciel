@@ -1,7 +1,7 @@
 COMPOSE_CONF_PATH=.
 
 up:
-	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml --env-file ${COMPOSE_CONF_PATH}/.env up
+	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml up
 
 down:
 	docker-compose -f ${COMPOSE_CONF_PATH}/docker-compose.yml down

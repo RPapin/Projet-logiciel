@@ -49,34 +49,42 @@
             let dbProducts = data.products
             data = await service.getCall('menus', authToken);
             let dbMenus = data.menus
-
             this.clientCart.forEach(cartProduct => {
                 if(cartProduct.item_type == "product")
                 {
-                    this.products.push(dbProducts.find(product => product._id === cartProduct.item_id))
+                    let productTemp = dbProducts.find(product => product._id === cartProduct.item_id)
+                    productTemp['item_type'] = "article"
+                    this.products.push(productTemp)
                 }
                 else if(cartProduct.item_type == "menu")
                 {
-                    this.products.push(dbMenus.find(menu => menu._id === cartProduct.item_id))
+                    let menuTemp = dbMenus.find(menu => menu._id === cartProduct.item_id)
+                    menuTemp['item_type'] = "menu"
+                    this.products.push(menuTemp)
                 }
 
                 if(this.products.length > 0)this.products[this.products.length-1].quantity = cartProduct.quantity
             })
+            console.log(this.products)
         },
 
         methods: {
             ...mapMutations([
-                'updateCart'
+                'updateCart',
+                'removeCart'
             ]),
             async valideCart(){
                 console.log(this.products)
+                let authToken = localStorage.getItem('AUTH_TOKEN')
                 const body = {
                     account_id : this.userInfo.account_id,
                     products: this.products
                 }
                 const apiService = new ApiService()
                 let apiURL = 'create-order';
-                await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)))
+                await apiService.postCall(apiURL, JSON.parse(JSON.stringify(body)), authToken)
+                this.removeCart()
+                this.$router.push('/follow-orders')
             }
         },
         computed: mapState([
