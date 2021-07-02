@@ -2,7 +2,7 @@
   <div class="container">
       <h1>Administration</h1>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <h3>Historique de Logs</h3>
         <div>Nombre de logs : {{nbConnexion}}</div>
       <table class="table table-striped">
@@ -24,13 +24,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
-            <h3>Performance des serveurs (RAM)</h3>
-            <svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 200 100" style="border:solid 1px;">
-                <path :d="svgPathString" style="fill:none; stroke:#26de81; stroke-width:1px;"/>
-            </svg>
-        </div>
-          <div class="col-md-4">
+
+          <div class="col-md-6">
             <h3>Utilisation de nos components</h3>
             <table class="table table-striped">
                 <thead class="thead-dark">
@@ -48,6 +43,12 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="col-md-10">
+            <h3>Performance des serveurs (RAM)</h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 200 100" style="border:solid 1px;">
+                <path :d="svgPathString" style="fill:none; stroke:#26de81; stroke-width:1px;"/>
+            </svg>
         </div>
       </div>
   </div>

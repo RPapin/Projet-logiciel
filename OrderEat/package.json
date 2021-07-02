@@ -12,7 +12,7 @@
     "start.dev": "vue-cli-service serve"
   },
   "dependencies": {
-    "@ordereat/banner": "^1.1.1",
+    "@ordereat/banner": "^1.1.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "cache-loader": "^4.1.0",

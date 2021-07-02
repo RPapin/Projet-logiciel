@@ -9,7 +9,7 @@
             <router-link v-if="this.seeMenu.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editMenu/0">Creer un Menu</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
+            <router-link v-if="this.createProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/editProduct/0">Creer un produit</router-link>
           </li>
           <li class="nav-item">
             <router-link v-if="this.seeProduct.includes(this.userInfo.role_name)" class="nav-link pr-3" to="/viewProduct">Voir les produits</router-link>
@@ -64,6 +64,7 @@
         return {
           seeMenu : ['admin', 'restaurateur'],
           seeProduct : ['admin', 'restaurateur', 'client'],
+          createProduct : ['admin', 'restaurateur'],
           seeCart : ['admin', 'client'],
           seeTakeOrder : ['livreur'],
           seeOrder : ['admin', 'restaurateur', 'client', 'livreur', 'commercial'],
